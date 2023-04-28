@@ -1,6 +1,11 @@
 import { dmsInstance } from '.'
 import { TRole } from '../store/auth'
 
+export interface IResetPasswordProps {
+  userId: string
+  oldPassword: string
+  newPassword: string
+}
 export interface ISignupProps {
   name: string
   email: string
@@ -20,4 +25,8 @@ export async function signup(data: ISignupProps) {
 
 export async function login(data: ILoginProps) {
   return await dmsInstance.post('/login', { ...data })
+}
+
+export async function resetPassword(data: IResetPasswordProps) {
+  return await dmsInstance.post('/editProfile', { ...data })
 }
