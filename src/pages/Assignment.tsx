@@ -1,14 +1,41 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import AppLayout from '../AppLayout'
 import { useFieldArray, useForm } from 'react-hook-form'
+import { getBatches } from '../api/assignment'
 
 interface IQuestions {
   questions: string[]
+  batchId: string
+  courseId: string
+}
+
+interface IBatch {
+  batch_id: string
+  batch_code: string
+  batch_name: string
+}
+
+interface ICourse {
+  course_id: string
+  course_code: string
+  course_name: string
 }
 
 const Assignment = () => {
+  const [batches, setBatches] = useState<IBatch[]>([])
+  const [courses, setCourses] = useState<ICourse[]>([])
+
+  useEffect(() => {
+    void (async () => {
+      const res = await getBatches('')
+
+      setBatches(res.data.batches)
+      setCourses(res.data.courses)
+    })()
+  }, [])
+
   const { control, register, handleSubmit } = useForm<IQuestions>({
-    defaultValues: { questions: ['Enter the Question'] },
+    defaultValues: { questions: ['question 1'], batchId: '', courseId: '' },
   })
 
   const { fields, append } = useFieldArray({
@@ -24,28 +51,66 @@ const Assignment = () => {
 
   return (
     <AppLayout>
-      <div className='font-semibold mb-3'>Upload the Time Table</div>
-      <form onSubmit={handleSubmit(onSubmit)} className='flex  gap-4'>
-        <div className='w-full flex flex-col gap-4'>
-          {fields.map((field, index) => (
-            <input
-              key={field.id}
-              {...register(`questions.${index}`)}
-              type='text'
-              placeholder='Enter the question'
-              className='input input-bordered input-primary w-full max-w-sm'
-            />
-          ))}
+      <div className='flex flex-col gap-4'>
+        <div className='form-control w-full max-w-xs'>
+          <div className='font-semibold'>Upload the Assignment</div>
+
+          <label className='label'>
+            <span className='label-text'>Pick the Batch</span>
+          </label>
+          <select
+            {...register('batchId', { required: true })}
+            className='select select-primary w-full max-w-xs'
+          >
+            {batches.map(({ batch_code, batch_id, batch_name }) => (
+              <option key={batch_code} value={batch_id}>
+                {batch_name}
+              </option>
+            ))}
+          </select>
         </div>
-        <div className='flex w-full max-w-xs gap-4'>
-          <button type='button' className='btn btn-primary w-40' onClick={addQuestion}>
-            Add Question
-          </button>
-          <button type='submit' className='btn btn-primary w-40'>
-            Upload
-          </button>
+
+        <div className='form-control w-full max-w-xs'>
+          <label className='label'>
+            <span className='label-text'>Pick the course</span>
+          </label>
+          <select
+            {...register('courseId', { required: true })}
+            className='select select-primary w-full max-w-xs'
+          >
+            {courses.map(({ course_code, course_id, course_name }) => (
+              <option key={course_code} value={course_id}>
+                {course_name}
+              </option>
+            ))}
+          </select>
         </div>
-      </form>
+
+        <form onSubmit={handleSubmit(onSubmit)} className='flex gap-4'>
+          <div className='w-full flex flex-col gap-4'>
+            <label className='label'>
+              <span className='label-text -mb-4'>Enter the questions</span>
+            </label>
+            {fields.map((field, index) => (
+              <input
+                key={field.id}
+                {...register(`questions.${index}`)}
+                type='text'
+                placeholder={`question ${index + 1}`}
+                className='input input-bordered input-primary w-full max-w-sm'
+              />
+            ))}
+          </div>
+          <div className='flex w-full max-w-xs gap-4 items-end'>
+            <button type='button' className='btn btn-primary w-40' onClick={addQuestion}>
+              Add Question
+            </button>
+            <button type='submit' className='btn btn-primary w-40'>
+              Upload
+            </button>
+          </div>
+        </form>
+      </div>
     </AppLayout>
   )
 }
