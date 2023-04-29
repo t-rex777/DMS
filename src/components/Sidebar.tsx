@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 const adminNavList = [
   {
     id: 1,
-    label: 'Staff Verification',
     link: '/approvals',
+    label: 'Staff Verification',
   },
 
   {
@@ -146,7 +146,7 @@ const studentNavList = [
     link: '/notice',
   },
   {
-    id: 5,
+    id: 8,
     label: 'Attendance',
     link: '/attendance',
   },
