@@ -2,7 +2,7 @@ import React from 'react'
 
 const Navbar = () => {
   return (
-    <div className='navbar bg-slate-700 flex justify-end'>
+    <div className='navbar bg-slate-600 flex justify-end'>
       <ul className='menu menu-horizontal px-1 gap-2'>
         <li className='bg-primary rounded'>
           <a>Home</a>

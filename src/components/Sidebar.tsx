@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useAuthState } from '../store/auth'
 
 const adminNavList = [
   {
@@ -128,7 +129,7 @@ const studentNavList = [
   {
     id: 4,
     label: 'Time Table',
-    link: '/time-table',
+    link: '/timetable',
   },
   {
     id: 5,
@@ -153,8 +154,10 @@ const studentNavList = [
 ]
 
 const Sidebar = () => {
+  const { name, email } = useAuthState()
+
   return (
-    <div className='absolute left-0 top-0 h-screen w-48 bg-slate-700 flex flex-col justify-between px-4 py-2'>
+    <div className='absolute left-0 top-0 h-screen w-48 bg-slate-600 flex flex-col justify-between px-4 py-2'>
       <div className='mt-16 flex flex-col gap-4'>
         {studentNavList.map(({ id, label, link }) => (
           <div key={id} className='bg-primary p-1 rounded hover:bg-secondary'>
@@ -163,8 +166,8 @@ const Sidebar = () => {
         ))}
       </div>
       <div>
-        <p className='text-primary'> Username</p>
-        <p className='text-primary'> Email</p>
+        <p className='text-primary'>{name}</p>
+        <p className='text-primary'>{email}</p>
       </div>
     </div>
   )

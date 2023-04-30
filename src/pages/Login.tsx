@@ -1,12 +1,16 @@
 import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { ILoginProps, login } from '../api/auth'
+import { useAuthState } from '../store/auth'
 
 const Login = () => {
   const { register, handleSubmit } = useForm<ILoginProps>()
 
+  const { setUserDetails } = useAuthState()
+
   const onSubmit: SubmitHandler<ILoginProps> = async (data) => {
-    await login(data)
+    const res = await login(data)
+    setUserDetails(res.data)
   }
 
   return (
