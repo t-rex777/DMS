@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import UserDetails from './pages/UserDetails'
 import TimeTable from './pages/TimeTable'
 import Assignment from './pages/Assignment'
+import ResetPassword from './pages/ResetPassword'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route element={<UserDetails />} path='/user-details' />
         <Route element={<TimeTable />} path='/timetable' />
         <Route element={<Assignment />} path='/assignment' />
+        <Route element={<ResetPassword />} path='/resetpassword' />
       </Routes>
     </BrowserRouter>
   )

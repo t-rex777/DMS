@@ -1,6 +1,6 @@
 import { dmsInstance } from '.'
 
-interface IUploadAssignmentProps {
+export interface IUploadAssignmentProps {
   userId: string
   questions: string[]
   batchId: string
