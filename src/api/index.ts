@@ -1,7 +1,5 @@
 import axios from 'axios'
 
 export const dmsInstance = axios.create({
-  baseURL: 'https://some-domain.com/api/',
-  timeout: 1000,
-  headers: { 'X-Custom-Header': 'foobar' },
+  baseURL: 'https://fp12-4dk76hxqra-el.a.run.app/',
 })

@@ -11,6 +11,10 @@ export async function uploadTimeTable(data: IUploadTimeTableProps) {
   return await dmsInstance.post('/uploadTimetable', { ...data })
 }
 
+export async function getTimeTableDropdown() {
+  return await dmsInstance.get('/uploadTimetable')
+}
+
 export async function getTimeTable(userId: string) {
   return await dmsInstance.get('/viewTimeTable', { data: userId })
 }
