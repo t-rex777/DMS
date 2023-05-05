@@ -7,6 +7,8 @@ import UserDetails from './pages/UserDetails'
 import TimeTable from './pages/TimeTable'
 import Assignment from './pages/Assignment'
 import ResetPassword from './pages/ResetPassword'
+import Notice from './pages/Notice'
+import Result from './pages/Result'
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
         <Route element={<TimeTable />} path='/timetable' />
         <Route element={<Assignment />} path='/assignment' />
         <Route element={<ResetPassword />} path='/resetpassword' />
+        <Route element={<Notice />} path='/notice' />
+        <Route element={<Result />} path='/result' />
       </Routes>
     </BrowserRouter>
   )

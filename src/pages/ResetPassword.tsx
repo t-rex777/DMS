@@ -1,12 +1,15 @@
 import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IResetPasswordProps, resetPassword } from '../api/auth'
+import { useAuthState } from '../store/auth'
 
 const ResetPassword = () => {
+  const { userId } = useAuthState()
+
   const { register, handleSubmit } = useForm<IResetPasswordProps>()
 
   const onSubmit: SubmitHandler<IResetPasswordProps> = async (data) => {
-    await resetPassword(data)
+    await resetPassword({ ...data, userId })
   }
 
   return (
