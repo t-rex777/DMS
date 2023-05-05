@@ -7,14 +7,16 @@ export interface IUploadExternalResultsProps {
   data: string
 }
 
-export async function uploadInternalResult(data: IUploadExternalResultsProps) {
+export async function uploadExternalResult(data: IUploadExternalResultsProps) {
   return await dmsInstance.post('/uploadExternalResult', { ...data })
 }
 
-// export async function getNotice(data: Pick<IUploadExternalResultsProps, 'batchId' | 'courseId'>) {
-//   return await dmsInstance.post('/viewNotice', { ...data })
-// }
+export async function getExternalResult(
+  data: Pick<IUploadExternalResultsProps, 'batchId' | 'courseId' | 'data'>,
+) {
+  return await dmsInstance.post('/viewExternalResult', { ...data })
+}
 
-export async function getuploadExternalResultsDropdowns(userId: string) {
+export async function getExternalResultsDropdowns(userId: string) {
   return await dmsInstance.get('/uploadInternalResult', { data: { userId } })
 }

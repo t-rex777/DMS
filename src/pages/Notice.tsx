@@ -7,7 +7,7 @@ import AddNotice from '../components/AddNotice'
 const Notice = () => {
   const { role } = useAuthState()
 
-  return <AppLayout>{role !== 'student' ? <ViewNotice /> : <AddNotice />}</AppLayout>
+  return <AppLayout>{role === 'student' ? <ViewNotice /> : <AddNotice />}</AppLayout>
 }
 
 export default Notice
