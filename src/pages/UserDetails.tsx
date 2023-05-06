@@ -4,13 +4,8 @@ import { useAuthState } from '../store/auth'
 import React from 'react'
 
 const UserDetails = () => {
-  const {
-    dob = '2022-04-13',
-    email = 'user@gmail.com',
-    name = 'User Name',
-    role = 'admin',
-    userId = 'FEFWERF',
-  } = useAuthState()
+  const { dob, email, name, role, userId } = useAuthState()
+  console.log({ dob, email, name, role, userId })
 
   const navigate = useNavigate()
 

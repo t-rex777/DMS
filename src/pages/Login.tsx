@@ -2,15 +2,34 @@ import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { ILoginProps, login } from '../api/auth'
 import { useAuthState } from '../store/auth'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const { register, handleSubmit } = useForm<ILoginProps>()
 
   const { setUserDetails } = useAuthState()
+  const navigate = useNavigate()
 
   const onSubmit: SubmitHandler<ILoginProps> = async (data) => {
     const res = await login(data)
-    setUserDetails(res.data)
+    console.log({ res })
+    console.log({
+      role: res.data.result[0][4],
+      dob: res.data.result[0][6],
+      email: res.data.result[0][2],
+      name: res.data.result[0][1],
+      userId: res.data.result[0][0],
+    })
+
+    setUserDetails({
+      role: res.data.result[0][4],
+      dob: res.data.result[0][6],
+      email: res.data.result[0][2],
+      name: res.data.result[0][1],
+      userId: res.data.result[0][0],
+    } as any)
+
+    navigate('/')
   }
 
   return (

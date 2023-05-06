@@ -1,10 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { IUploadTimeTableProps, getTimeTableDropdown, uploadTimeTable } from '../api/timetable'
-import { useAuthState } from '../store/auth'
-import { IBatch, ICourse } from './AddNotice'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useAuthState } from '../store/auth'
+import { IUploadFeedbackProps, getFeedbackDropdown, uploadFeedback } from '../api/feedback'
 
-const AddTimetable = () => {
+export interface IBatch {
+  batch_id: string
+  batch_code: string
+  batch_name: string
+}
+
+export interface ICourse {
+  course_id: string
+  course_code: string
+  course_name: string
+}
+
+const AddFeedback = () => {
   const { userId } = useAuthState()
 
   const [batches, setBatches] = useState<IBatch[]>([
@@ -16,23 +27,18 @@ const AddTimetable = () => {
 
   useEffect(() => {
     void (async () => {
-      const res = await getTimeTableDropdown()
+      const res = await getFeedbackDropdown(userId)
 
       setBatches(res.data.batches)
       setCourses(res.data.courses)
     })()
   }, [])
 
-  const { register, handleSubmit } = useForm<IUploadTimeTableProps>()
+  const { register, handleSubmit } = useForm<IUploadFeedbackProps>()
 
-  const onSubmit: SubmitHandler<IUploadTimeTableProps> = async ({ batchId, courseId, data }) => {
-    const formData = new FormData()
-    formData.append('file', data[0])
-
-    await uploadTimeTable({
-      batchId,
-      courseId,
-      data: formData,
+  const onSubmit: SubmitHandler<IUploadFeedbackProps> = async (data) => {
+    await uploadFeedback({
+      ...data,
       userId,
     })
   }
@@ -40,15 +46,15 @@ const AddTimetable = () => {
   return (
     <div className='flex flex-col gap-4'>
       <form onSubmit={handleSubmit(onSubmit)} className='flex gap-4 flex-col'>
-        <div className='form-control w-full max-w-sm'>
-          <div className='font-semibold'>Upload the Timetable</div>
+        <div className='form-control w-full max-w-xs'>
+          <div className='font-semibold'>Upload the Feedback</div>
 
           <label className='label'>
             <span className='label-text'>Pick the Batch</span>
           </label>
           <select
             {...register('batchId', { required: true })}
-            className='select select-primary w-full max-w-sm'
+            className='select select-primary w-full max-w-xs'
           >
             {batches.map(({ batch_code, batch_id, batch_name }) => (
               <option key={batch_code} value={batch_id}>
@@ -58,13 +64,13 @@ const AddTimetable = () => {
           </select>
         </div>
 
-        <div className='form-control w-full max-w-sm'>
+        <div className='form-control w-full max-w-xs'>
           <label className='label'>
-            <span className='label-text'>Pick the Course</span>
+            <span className='label-text'>Pick the course</span>
           </label>
           <select
             {...register('courseId', { required: true })}
-            className='select select-primary w-full max-w-sm'
+            className='select select-primary w-full max-w-xs'
           >
             {courses.map(({ course_code, course_id, course_name }) => (
               <option key={course_code} value={course_id}>
@@ -76,15 +82,14 @@ const AddTimetable = () => {
 
         <div className='w-full flex flex-col gap-4'>
           <label className='label'>
-            <span className='label-text -mb-4'></span>
+            <span className='label-text -mb-4'>Write the Feedback</span>
           </label>
-
-          <input
-            accept='image/png, image/gif, image/jpeg'
-            type='file'
-            {...register('data')}
-            className='file-input file-input-bordered file-input-primary w-full max-w-sm'
-          />
+          <textarea
+            {...register('feedbackData')}
+            rows={5}
+            className='textarea textarea-primary w-full max-w-xs'
+            placeholder='Bio'
+          ></textarea>
         </div>
 
         <button type='submit' className='btn btn-primary w-40'>
@@ -95,4 +100,4 @@ const AddTimetable = () => {
   )
 }
 
-export default AddTimetable
+export default AddFeedback

@@ -1,8 +1,13 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { useAuthState } from '../store/auth'
+import { useNavigate } from 'react-router-dom'
+import { TRole, useAuthState } from '../store/auth'
+export interface IListType {
+  id: number
+  label: string
+  link: string
+}
 
-const adminNavList = [
+const adminNavList: IListType[] = [
   {
     id: 1,
     link: '/approvals',
@@ -18,7 +23,7 @@ const adminNavList = [
   {
     id: 3,
     label: 'Assign Course',
-    link: '/assign-course',
+    link: '/course',
   },
 
   {
@@ -34,7 +39,7 @@ const adminNavList = [
   },
 ]
 
-const staffNavList = [
+const staffNavList: IListType[] = [
   {
     id: 1,
     label: 'Students Verification',
@@ -50,7 +55,7 @@ const staffNavList = [
   {
     id: 3,
     label: 'Time Table',
-    link: '/time-table',
+    link: '/timetable',
   },
 
   {
@@ -62,16 +67,11 @@ const staffNavList = [
   {
     id: 5,
     label: 'External Result',
-    link: '/external-result',
-  },
-  {
-    id: 6,
-    label: 'Placement Records',
-    link: '/placement-records',
+    link: '/result',
   },
 ]
 
-const facultyNavList = [
+const facultyNavList: IListType[] = [
   {
     id: 1,
     label: 'User details',
@@ -81,7 +81,7 @@ const facultyNavList = [
   {
     id: 2,
     label: 'Internal Result',
-    link: '/internal-result',
+    link: '/result',
   },
 
   {
@@ -104,11 +104,11 @@ const facultyNavList = [
   {
     id: 6,
     label: 'Time Table',
-    link: '/time-table',
+    link: '/timetable',
   },
 ]
 
-const studentNavList = [
+const studentNavList: IListType[] = [
   {
     id: 1,
     label: 'User details',
@@ -118,7 +118,7 @@ const studentNavList = [
   {
     id: 2,
     label: 'Internal Result',
-    link: '/internal-result',
+    link: '/result',
   },
 
   {
@@ -154,14 +154,26 @@ const studentNavList = [
 ]
 
 const Sidebar = () => {
-  const { name, email } = useAuthState()
+  const { name, email, role } = useAuthState()
+  const navigate = useNavigate()
+
+  const assignList: Record<TRole, IListType[]> = {
+    admin: adminNavList,
+    faculty: facultyNavList,
+    staff: staffNavList,
+    student: studentNavList,
+  }
 
   return (
     <div className='absolute left-0 top-0 h-screen w-48 bg-slate-600 flex flex-col justify-between px-4 py-2'>
       <div className='mt-16 flex flex-col gap-4'>
-        {studentNavList.map(({ id, label, link }) => (
-          <div key={id} className='bg-primary p-1 rounded hover:bg-secondary'>
-            <Link to={link}>{label}</Link>
+        {assignList[role].map(({ id, label, link }) => (
+          <div
+            key={id}
+            onClick={() => navigate(link)}
+            className='bg-primary p-1 rounded hover:bg-secondary cursor-pointer'
+          >
+            <h2 className='w-full'>{label}</h2>
           </div>
         ))}
       </div>

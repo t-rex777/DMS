@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { getNoticeDropdowns } from '../api/notice'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import {
   IUploadExternalResultsProps,
@@ -53,10 +52,10 @@ const ViewResult = ({ type }: IViewResultProps) => {
   return (
     <div>
       <div className='mb-3 font-semibold text-3xl'>{type} Result</div>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
         <select
           {...register('batchId', { required: true })}
-          className='select select-primary w-full max-w-xs'
+          className='select select-primary w-full max-w-sm'
         >
           <option disabled selected>
             Choose the batch
@@ -70,7 +69,7 @@ const ViewResult = ({ type }: IViewResultProps) => {
 
         <select
           {...register('batchId', { required: true })}
-          className='select select-primary w-full max-w-xs'
+          className='select select-primary w-full max-w-sm'
         >
           <option disabled selected>
             Choose the course
@@ -81,6 +80,10 @@ const ViewResult = ({ type }: IViewResultProps) => {
             </option>
           ))}
         </select>
+
+        <button type='submit' className='btn btn-primary mt-5 float-right max-w-sm'>
+          Show Result
+        </button>
       </form>
 
       <div>{result && <img src={result} alt='result' />}</div>

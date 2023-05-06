@@ -1,3 +1,4 @@
+import { persist } from 'zustand/middleware'
 import { create } from 'zustand'
 import { ISignupProps } from '../api/auth'
 
@@ -13,14 +14,20 @@ interface AuthState {
   setUserDetails: (data: ISignupProps) => void
 }
 
-export const useAuthState = create<AuthState>()((set) => ({
-  role: 'student',
-  dob: '',
-  email: '',
-  name: '',
-  userId: '',
+export const useAuthState = create(
+  persist<AuthState>(
+    (set) => ({
+      role: 'student',
+      dob: '',
+      email: '',
+      name: '',
+      userId: '',
 
-  setUserDetails(data) {
-    set((state) => ({ ...data, ...state }))
-  },
-}))
+      setUserDetails(data) {
+        set({ ...data })
+      },
+    }),
+
+    { name: 'user-details' },
+  ),
+)
