@@ -15,15 +15,15 @@ export interface IApprovalList {
   userId: string[]
 }
 
-const userDetails: IUserDetails[] = [
+export const userDetails: IUserDetails[] = [
   { userId: '1', dob: '2000-1-1', email: 'student@gmail.com', name: 'Student', role: 'student' },
-  { userId: '1', dob: '2000-1-1', email: 'student@gmail.com', name: 'Student', role: 'student' },
-  { userId: '1', dob: '2000-1-1', email: 'student@gmail.com', name: 'Student', role: 'student' },
-  { userId: '1', dob: '2000-1-1', email: 'student@gmail.com', name: 'Student', role: 'student' },
-  { userId: '1', dob: '2000-1-1', email: 'student@gmail.com', name: 'Student', role: 'student' },
-  { userId: '1', dob: '2000-1-1', email: 'student@gmail.com', name: 'Student', role: 'student' },
-  { userId: '1', dob: '2000-1-1', email: 'student@gmail.com', name: 'Student', role: 'student' },
-  { userId: '1', dob: '2000-1-1', email: 'student@gmail.com', name: 'Student', role: 'student' },
+  { userId: '2', dob: '2000-1-1', email: 'student@gmail.com', name: 'Student', role: 'student' },
+  { userId: '3', dob: '2000-1-1', email: 'student@gmail.com', name: 'Student', role: 'student' },
+  { userId: '4', dob: '2000-1-1', email: 'student@gmail.com', name: 'Student', role: 'student' },
+  { userId: '5', dob: '2000-1-1', email: 'student@gmail.com', name: 'Student', role: 'student' },
+  { userId: '6', dob: '2000-1-1', email: 'student@gmail.com', name: 'Student', role: 'student' },
+  { userId: '7', dob: '2000-1-1', email: 'student@gmail.com', name: 'Student', role: 'student' },
+  { userId: '8', dob: '2000-1-1', email: 'student@gmail.com', name: 'Student', role: 'student' },
 ]
 
 const ApprovalTable = () => {

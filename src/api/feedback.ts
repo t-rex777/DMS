@@ -3,6 +3,8 @@ import { dmsInstance } from '.'
 export interface IUploadFeedbackProps {
   userId: string
   courseId: string
+  batchId: string
+  feedbackData: string
 }
 
 export async function uploadFeedback(data: IUploadFeedbackProps) {
