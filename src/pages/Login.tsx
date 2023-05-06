@@ -52,6 +52,14 @@ const Login = () => {
       <button type='submit' className='btn btn-primary w-full max-w-xs'>
         Login
       </button>
+
+      <button
+        type='button'
+        className='btn btn-primary w-full max-w-xs'
+        onClick={() => navigate('/signup')}
+      >
+        Register
+      </button>
     </form>
   )
 }
