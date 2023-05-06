@@ -14,6 +14,7 @@ import Feedback from './pages/Feedback'
 import Home from './pages/Home'
 import AboutUs from './pages/AboutUs'
 import ContactUs from './pages/ContactUs'
+import ErrorPage from './pages/ErrorPage'
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route element={<Result />} path='/result' />
         <Route element={<Attendance />} path='/attendance' />
         <Route element={<Feedback />} path='/feedback' />
+        <Route element={<ErrorPage />} path='*' />
       </Routes>
     </BrowserRouter>
   )

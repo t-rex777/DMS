@@ -2,12 +2,15 @@ import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { TRole } from '../store/auth'
 import { ISignupProps, signup } from '../api/auth'
+import { useNavigate } from 'react-router-dom'
 
 const Signup = () => {
   const { register, handleSubmit } = useForm<ISignupProps>()
+  const navigate = useNavigate()
 
   const onSubmit: SubmitHandler<ISignupProps> = async (data) => {
     await signup(data)
+    navigate('/login')
   }
 
   const roles: TRole[] = ['admin', 'faculty', 'staff', 'student']

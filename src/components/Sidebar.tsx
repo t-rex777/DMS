@@ -165,7 +165,7 @@ const Sidebar = () => {
   }
 
   return (
-    <div className='absolute left-0 top-0 h-screen w-48 bg-slate-600 flex flex-col justify-between px-4 py-2'>
+    <div className='absolute left-0 top-0 h-screen w-48 bg-slate-900 flex flex-col justify-between px-4 py-2'>
       <div className='mt-16 flex flex-col gap-4'>
         {assignList[role].map(({ id, label, link }) => (
           <div

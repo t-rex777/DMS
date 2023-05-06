@@ -2,9 +2,11 @@ import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IResetPasswordProps, resetPassword } from '../api/auth'
 import { useAuthState } from '../store/auth'
+import { useNavigate } from 'react-router-dom'
 
 const ResetPassword = () => {
   const { userId } = useAuthState()
+  const navigate = useNavigate()
 
   const { register, handleSubmit } = useForm<IResetPasswordProps>()
 
@@ -29,6 +31,13 @@ const ResetPassword = () => {
       />
       <button type='submit' className='btn btn-primary w-full max-w-sm'>
         Submit
+      </button>
+      <button
+        onClick={() => navigate(-1)}
+        type='button'
+        className='btn btn-primary w-full max-w-sm'
+      >
+        Go Back
       </button>
     </form>
   )

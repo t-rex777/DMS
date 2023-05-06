@@ -13,7 +13,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className='navbar bg-slate-600 flex justify-end absolute top-0 z-50'>
+    <div className='navbar bg-slate-900 flex justify-end absolute top-0 z-50'>
       <ul className='menu menu-horizontal px-1 gap-2'>
         <li className='bg-primary rounded' onClick={() => navigate('/')}>
           <a>Home</a>
