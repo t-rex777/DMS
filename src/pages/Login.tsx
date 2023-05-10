@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { ILoginProps, login } from '../api/auth'
 import { useAuthState } from '../store/auth'
 import { useNavigate } from 'react-router-dom'
+import { getUser } from '../helpers/getUser'
 
 const Login = () => {
   const { register, handleSubmit } = useForm<ILoginProps>()
@@ -11,56 +12,54 @@ const Login = () => {
   const navigate = useNavigate()
 
   const onSubmit: SubmitHandler<ILoginProps> = async (data) => {
-    const res = await login(data)
-    console.log({ res })
-    console.log({
-      role: res.data.result[0][4],
-      dob: res.data.result[0][6],
-      email: res.data.result[0][2],
-      name: res.data.result[0][1],
-      userId: res.data.result[0][0],
-    })
+    try {
+      const res = await login(data)
+      if (res.data.result === false) throw Error('Invalid credentials')
 
-    setUserDetails({
-      role: res.data.result[0][4],
-      dob: res.data.result[0][6],
-      email: res.data.result[0][2],
-      name: res.data.result[0][1],
-      userId: res.data.result[0][0],
-    } as any)
+      navigate('/')
+      const { dob, email, name, role, userId } = getUser(res.data.result[0])
 
-    navigate('/')
+      setUserDetails({
+        role,
+        dob,
+        email,
+        name,
+        userId,
+      } as any)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className='bg-secondary w-screen h-screen flex flex-col justify-center items-center gap-2'
-    >
-      <input
-        {...register('email', { required: true })}
-        placeholder='Email'
-        className='input input-bordered input-primary w-full max-w-xs'
-      />
-      <input
-        {...register('password', { required: true })}
-        placeholder='Password'
-        type='password'
-        className='input input-bordered input-primary w-full max-w-xs'
-      />
-
-      <button type='submit' className='btn btn-primary w-full max-w-xs'>
-        Login
-      </button>
-
-      <button
-        type='button'
-        className='btn btn-primary w-full max-w-xs'
-        onClick={() => navigate('/signup')}
+    <div>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className='bg-secondary w-screen h-screen flex flex-col justify-center items-center gap-2'
       >
-        Register
-      </button>
-    </form>
+        <input
+          {...register('email', { required: true })}
+          placeholder='Email'
+          className='input input-bordered input-primary w-full max-w-xs'
+        />
+        <input
+          {...register('password', { required: true })}
+          placeholder='Password'
+          type='password'
+          className='input input-bordered input-primary w-full max-w-xs'
+        />
+        <button type='submit' className='btn btn-primary w-full max-w-xs'>
+          Login
+        </button>
+        <button
+          type='button'
+          className='btn btn-primary w-full max-w-xs'
+          onClick={() => navigate('/signup')}
+        >
+          Register
+        </button>
+      </form>
+    </div>
   )
 }
 

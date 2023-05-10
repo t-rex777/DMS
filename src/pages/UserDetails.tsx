@@ -12,7 +12,15 @@ const UserDetails = () => {
   return (
     <AppLayout>
       <div className='flex flex-col justify-between items-center bg-slate-600 rounded-lg h-96 text-white p-10 gap-4'>
-        <div className='font-bold text-6xl text-slate-200'>{name}</div>
+        <div className='font-semibold text-5xl text-slate-200 flex flex-col items-center'>
+          <img
+            src='https://img.freepik.com/premium-vector/person-avatar-icon-design-vector-multiple-use-vector-illustration_625349-280.jpg?w=740'
+            width={120}
+            height={120}
+            className='rounded-full'
+          />
+          <p>{name}</p>
+        </div>
 
         <div className='flex gap-4 w-full justify-between bg-slate-900 px-4 py-2 rounded-lg text-2xl'>
           <div className='flex flex-col items-center'>
@@ -33,6 +41,7 @@ const UserDetails = () => {
           </div>
         </div>
       </div>
+
       <div className='mt-5 flex justify-end'>
         <button
           onClick={() => navigate('/resetpassword')}

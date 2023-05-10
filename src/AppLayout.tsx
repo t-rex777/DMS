@@ -7,6 +7,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
     <div className='max-h-screen overflow-auto'>
       <Navbar />
       <Sidebar />
+
       <div
         className='p-8 ml-48 h-full'
         style={{
