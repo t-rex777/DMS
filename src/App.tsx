@@ -15,26 +15,33 @@ import Home from './pages/Home'
 import AboutUs from './pages/AboutUs'
 import ContactUs from './pages/ContactUs'
 import ErrorPage from './pages/ErrorPage'
+import PrivateRoute from './privateRoute'
+import AddCourse from './components/AddCourse'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<Home />} path='/' />
-        <Route element={<AboutUs />} path='/about-us' />
-        <Route element={<ContactUs />} path='/contact-us' />
         <Route element={<Login />} path='/login' />
         <Route element={<Signup />} path='/signup' />
-        <Route element={<Approvals />} path='/approvals' />
-        <Route element={<UserDetails />} path='/user-details' />
-        <Route element={<TimeTable />} path='/timetable' />
-        <Route element={<Assignment />} path='/assignment' />
-        <Route element={<ResetPassword />} path='/resetpassword' />
-        <Route element={<Notice />} path='/notice' />
-        <Route element={<Result />} path='/result' />
-        <Route element={<Attendance />} path='/attendance' />
-        <Route element={<Feedback />} path='/feedback' />
-        <Route element={<ErrorPage />} path='*' />
+
+        <Route element={<PrivateRoute />} path='/'>
+          <Route element={<Home />} path='/' />
+          <Route element={<AboutUs />} path='/about-us' />
+          <Route element={<ContactUs />} path='/contact-us' />
+          <Route element={<Approvals />} path='/approvals' />
+          <Route element={<AddCourse />} path='/add-course' />
+
+          <Route element={<UserDetails />} path='/user-details' />
+          <Route element={<TimeTable />} path='/timetable' />
+          <Route element={<Assignment />} path='/assignment' />
+          <Route element={<ResetPassword />} path='/resetpassword' />
+          <Route element={<Notice />} path='/notice' />
+          <Route element={<Result />} path='/result' />
+          <Route element={<Attendance />} path='/attendance' />
+          <Route element={<Feedback />} path='/feedback' />
+          <Route element={<ErrorPage />} path='*' />
+        </Route>
       </Routes>
     </BrowserRouter>
   )

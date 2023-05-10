@@ -7,7 +7,6 @@ import {
   getStudentsList,
   uploadAttendance,
 } from '../api/attendance'
-import { userDetails } from './ApprovalTable'
 
 export interface IBatch {
   batch_id: string
@@ -24,7 +23,7 @@ export interface ICourse {
 const AddAttendance = () => {
   const { userId } = useAuthState()
 
-  const [students, setStudents] = useState(userDetails)
+  const [students, setStudents] = useState([])
 
   const [batches, setBatches] = useState<IBatch[]>([
     { batch_code: 'rwg', batch_id: 'gr', batch_name: 'rwg' },
