@@ -2,9 +2,9 @@ import { dmsInstance } from '.'
 import { TRole } from '../store/auth'
 
 export interface IResetPasswordProps {
-  userId: string
-  oldPassword: string
-  newPassword: string
+  user_id: string
+  old_password: string
+  new_password: string
 }
 export interface ISignupProps {
   name: string
