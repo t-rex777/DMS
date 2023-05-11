@@ -23,7 +23,7 @@ const adminNavList: IListType[] = [
   {
     id: 3,
     label: 'Assign Course',
-    link: '/course',
+    link: '/assign-course',
   },
 
   {

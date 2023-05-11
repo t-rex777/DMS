@@ -11,7 +11,7 @@ const ResetPassword = () => {
   const { register, handleSubmit } = useForm<IResetPasswordProps>()
 
   const onSubmit: SubmitHandler<IResetPasswordProps> = async (data) => {
-    await resetPassword({ ...data, userId })
+    await resetPassword({ ...data, user_id: userId })
   }
 
   return (
@@ -20,12 +20,14 @@ const ResetPassword = () => {
       className='bg-secondary w-screen h-screen flex flex-col justify-center items-center gap-2'
     >
       <input
-        {...register('oldPassword', { required: true })}
+        type='password'
+        {...register('old_password', { required: true })}
         placeholder='Old Password'
         className='input input-bordered input-primary w-full max-w-sm'
       />
       <input
-        {...register('newPassword', { required: true })}
+        type='password'
+        {...register('new_password', { required: true })}
         placeholder='New Password'
         className='input input-bordered input-primary w-full max-w-sm'
       />
