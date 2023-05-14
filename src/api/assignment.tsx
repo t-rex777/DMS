@@ -1,10 +1,10 @@
 import { dmsInstance } from '.'
 
 export interface IUploadAssignmentProps {
-  userId: string
+  user_id: string
   questions: string[]
-  batchId: string
-  courseId: string
+  batch: string
+  course: string
 }
 
 export async function uploadAssignment(data: IUploadAssignmentProps) {
@@ -17,4 +17,8 @@ export async function getBatches(user_id: string) {
 
 export async function getAssignment(user_id: string) {
   return await dmsInstance.get('/viewAssignment', { data: { user_id } })
+}
+
+export async function getAssignmentDropdown(user_id: string) {
+  return await dmsInstance.get('/assignment', { params: { user_id } })
 }

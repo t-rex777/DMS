@@ -20,6 +20,9 @@ import AddCourse from './pages/AddCourse'
 import AssignCourse from './pages/AssignCourse'
 import ProfileReview from './components/ProfileReview'
 import StudentsList from './pages/StudentsList'
+import AddPlacementCompany from './pages/AddPlacementCompany'
+import AddStudentPlacement from './pages/AddStudentPlacement'
+import AssignStudentToBatch from './pages/AssignStudentToBatch'
 
 // todo: make separate routes for each role
 function App() {
@@ -46,6 +49,9 @@ function App() {
           <Route element={<Attendance />} path='/attendance' />
           <Route element={<Feedback />} path='/feedbacks' />
           <Route element={<StudentsList />} path='/students' />
+          <Route element={<AddPlacementCompany />} path='/placement' />
+          <Route element={<AddStudentPlacement />} path='/student-placement' />
+          <Route element={<AssignStudentToBatch />} path='/assign-student' />
         </Route>
 
         <Route element={<ErrorPage />} path='*' />

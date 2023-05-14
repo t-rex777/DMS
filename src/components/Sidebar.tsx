@@ -63,6 +63,17 @@ const staffNavList: IListType[] = [
     label: 'Placement',
     link: '/placement',
   },
+
+  {
+    id: 7,
+    label: 'Student Placement',
+    link: '/student-placement',
+  },
+  {
+    id: 8,
+    label: 'Assign Student',
+    link: '/assign-student',
+  },
 ]
 
 const facultyNavList: IListType[] = [

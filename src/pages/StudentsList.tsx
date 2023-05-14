@@ -12,7 +12,8 @@ const StudentsList = () => {
       const res = await getAllStudents()
       setStudents(res.data.result.map(getUser))
     })()
-  })
+  }, [])
+
   return (
     <AppLayout>
       <h1 className='text-3xl font-semibold mb-4'>Approve Users</h1>
