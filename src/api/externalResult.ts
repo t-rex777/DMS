@@ -1,9 +1,9 @@
 import { dmsInstance } from '.'
 
 export interface IUploadExternalResultsProps {
-  userId: string
-  batchId: string
-  courseId: string
+  user_id: string
+  batch_id: string
+  course_id: string
   data: string
 }
 
@@ -12,7 +12,7 @@ export async function uploadExternalResult(data: IUploadExternalResultsProps) {
 }
 
 export async function getExternalResult(
-  data: Pick<IUploadExternalResultsProps, 'batchId' | 'courseId' | 'data'>,
+  data: Pick<IUploadExternalResultsProps, 'batch_id' | 'course_id' | 'data'>,
 ) {
   return await dmsInstance.post('/viewExternalResult', { ...data })
 }

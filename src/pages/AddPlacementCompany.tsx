@@ -1,24 +1,18 @@
 import React from 'react'
 import AppLayout from '../AppLayout'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { addCourse } from '../api/course'
 import { useAuthState } from '../store/auth'
+import { IAddPlacementCompany, addPlacementCompany } from '../api/placement'
 
-export interface IAddCourse {
-  courseName: string
-  courseCode: string
-}
-
-const AddCourse = () => {
-  const { register, handleSubmit } = useForm<IAddCourse>()
+const AddPlacementCompany = () => {
+  const { register, handleSubmit } = useForm<IAddPlacementCompany>()
 
   const { userId } = useAuthState()
 
-  const onSubmit: SubmitHandler<IAddCourse> = async (data) => {
-    await addCourse({
-      user_id: Number(userId),
-      course_code: data.courseCode,
-      course_name: data.courseName,
+  const onSubmit: SubmitHandler<IAddPlacementCompany> = async (data) => {
+    await addPlacementCompany({
+      ...data,
+      user_id: userId,
     })
   }
 
@@ -27,17 +21,22 @@ const AddCourse = () => {
       <div className='flex flex-col gap-4'>
         <form onSubmit={handleSubmit(onSubmit)} className='flex gap-4 flex-col'>
           <div className='form-control w-full max-w-sm'>
-            <div className='font-semibold mb-4'>Add a course</div>
+            <div className='font-semibold mb-4'>Add a Placement Company</div>
 
             <div className='flex flex-col gap-4'>
               <input
-                {...register('courseCode', { required: true })}
-                placeholder='Course Code'
+                {...register('company_name', { required: true })}
+                placeholder='Company Name'
                 className='input input-bordered input-primary w-full'
               />
               <input
-                {...register('courseName', { required: true })}
-                placeholder='Course Name'
+                {...register('role', { required: true })}
+                placeholder='Role'
+                className='input input-bordered input-primary w-full'
+              />
+              <input
+                {...register('ctc', { required: true })}
+                placeholder='CTC'
                 className='input input-bordered input-primary w-full'
               />
 
@@ -52,4 +51,4 @@ const AddCourse = () => {
   )
 }
 
-export default AddCourse
+export default AddPlacementCompany

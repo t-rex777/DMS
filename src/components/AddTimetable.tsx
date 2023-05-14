@@ -33,11 +33,7 @@ const AddTimetable = () => {
 
   const selectedBatch = watch('batch_id')
 
-  const onSubmit: SubmitHandler<IUploadTimeTableProps> = async ({
-    batch_id: batchId,
-    course_id: courseId,
-    data,
-  }) => {
+  const onSubmit: SubmitHandler<IUploadTimeTableProps> = async ({ batch_id, course_id, data }) => {
     const reader = new FileReader()
     reader.readAsDataURL(data[0] as unknown as Blob)
 
@@ -45,8 +41,8 @@ const AddTimetable = () => {
       const base64Image = 'data:image/png;base64,' + (reader.result as string)?.split(',')[1]
 
       await uploadTimeTable({
-        batch_id: batchId,
-        course_id: courseId,
+        batch_id,
+        course_id,
         data: base64Image,
         user_id: userId,
       })
@@ -68,7 +64,7 @@ const AddTimetable = () => {
                 courses: { courses },
               } = batches.find((d) => {
                 return Number(d.batch_id) === Number(e.target.value)
-              })
+              }) as IBatchesAndCourses
 
               setCourses(courses)
             }}

@@ -37,9 +37,14 @@ const ApprovalTable = () => {
   const { register, handleSubmit } = useForm<IApprovalList>()
 
   const onSubmit: SubmitHandler<IApprovalList> = async (data) => {
+    let details = data.userId
+    if (!Array.isArray(data.userId)) {
+      details = [data.userId]
+    }
+
     const res = await approveUsers(
       Number(userId),
-      data.userId.map((d) => Number(d)),
+      details.map((d) => Number(d)),
     )
 
     if (res.data.result === true) {
