@@ -49,7 +49,7 @@ const ApprovalTable = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h1 className='text-3xl font-semibold mb-4'>Approve faculties</h1>
+      <h1 className='text-3xl font-semibold mb-4'>Approve Users</h1>
       <table className='table table-zebra w-full'>
         <thead>
           <tr>

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { IUploadNoticeProps, getNoticeDropdowns, uploadNotice } from '../api/notice'
+import { IUploadNoticeProps, getBatches, uploadNotice } from '../api/notice'
 import { useAuthState } from '../store/auth'
 import { IUploadExternalResultsProps, uploadExternalResult } from '../api/externalResult'
 import { IUploadInternalResultsProps, uploadInternalResult } from '../api/internalResult'
+import { getAllCourses } from '../api/course'
 
 export interface IBatch {
   batch_id: string
@@ -33,10 +34,11 @@ const AddResult = ({ type }: IAddResutType) => {
 
   useEffect(() => {
     void (async () => {
-      const res = await getNoticeDropdowns()
+      const data1 = await getBatches()
+      const data2 = await getAllCourses(Number(userId))
 
-      setBatches(res.data.batches)
-      setCourses(res.data.courses)
+      setBatches(data1.data.result)
+      setCourses(data2.data.result)
     })()
   }, [])
 

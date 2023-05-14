@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { IUploadNoticeProps, getNoticeDropdowns, uploadNotice } from '../api/notice'
+import { IUploadNoticeProps, getBatches, uploadNotice } from '../api/notice'
 import { useAuthState } from '../store/auth'
 
 export interface IBatch {
@@ -27,7 +27,7 @@ const AddNotice = () => {
 
   useEffect(() => {
     void (async () => {
-      const res = await getNoticeDropdowns()
+      const res = await getBatches()
 
       setBatches(res.data.batches)
       setCourses(res.data.courses)

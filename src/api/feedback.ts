@@ -14,3 +14,7 @@ export async function uploadFeedback(data: IUploadFeedbackProps) {
 export async function getFeedbackDropdown(userId: string) {
   return await dmsInstance.get('/feedback', { data: { userId } })
 }
+
+export async function getAllFeedback(user_id: string) {
+  return await dmsInstance.post('/getAllFeedbacks', { user_id })
+}

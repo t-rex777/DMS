@@ -17,7 +17,7 @@ const Login = () => {
       if (res.data.result === false) throw Error('Invalid credentials')
 
       navigate('/')
-      const { dob, email, name, role, userId } = getUser(res.data.result[0])
+      const { dob, email, name, role, userId, isApproved } = getUser(res.data.result[0])
 
       setUserDetails({
         role,
@@ -25,6 +25,7 @@ const Login = () => {
         email,
         name,
         userId,
+        isApproved,
       } as any)
     } catch (error) {
       console.error(error)

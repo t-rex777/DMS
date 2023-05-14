@@ -18,6 +18,8 @@ import ErrorPage from './pages/ErrorPage'
 import PrivateRoute from './privateRoute'
 import AddCourse from './pages/AddCourse'
 import AssignCourse from './pages/AssignCourse'
+import ProfileReview from './components/ProfileReview'
+import StudentsList from './pages/StudentsList'
 
 // todo: make separate routes for each role
 function App() {
@@ -42,9 +44,12 @@ function App() {
           <Route element={<Notice />} path='/notice' />
           <Route element={<Result />} path='/result' />
           <Route element={<Attendance />} path='/attendance' />
-          <Route element={<Feedback />} path='/feedback' />
-          <Route element={<ErrorPage />} path='*' />
+          <Route element={<Feedback />} path='/feedbacks' />
+          <Route element={<StudentsList />} path='/students' />
         </Route>
+
+        <Route element={<ErrorPage />} path='*' />
+        <Route element={<ProfileReview />} path='/profile-review' />
       </Routes>
     </BrowserRouter>
   )
