@@ -1,10 +1,10 @@
 import { dmsInstance } from '.'
 
 export interface IUploadTimeTableProps {
-  userId: string
-  batchId: string
-  courseId: string
-  data: FormData
+  user_id: string
+  batch_id: string
+  course_id: string
+  data: string
 }
 
 export async function uploadTimeTable(data: IUploadTimeTableProps) {
@@ -12,7 +12,7 @@ export async function uploadTimeTable(data: IUploadTimeTableProps) {
 }
 
 export async function getTimeTableDropdown() {
-  return await dmsInstance.get('/uploadTimetable')
+  return await dmsInstance.get('/viewNotice')
 }
 
 export async function getTimeTable(userId: string) {

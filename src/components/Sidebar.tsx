@@ -41,15 +41,9 @@ const adminNavList: IListType[] = [
 
 const staffNavList: IListType[] = [
   {
-    id: 1,
-    label: 'Students Verification',
-    link: '/approvals',
-  },
-
-  {
     id: 2,
     label: 'Student Details',
-    link: '/student-details',
+    link: '/students',
   },
 
   {
@@ -59,15 +53,15 @@ const staffNavList: IListType[] = [
   },
 
   {
-    id: 4,
-    label: 'Notice',
-    link: '/notice',
-  },
-
-  {
     id: 5,
     label: 'External Result',
     link: '/result',
+  },
+
+  {
+    id: 6,
+    label: 'Placement',
+    link: '/placement',
   },
 ]
 

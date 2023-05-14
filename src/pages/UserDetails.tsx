@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import AppLayout from '../AppLayout'
 import { useAuthState } from '../store/auth'
 import React from 'react'
+import { getNameInitials } from '../helpers/getNameInitials'
 
 const UserDetails = () => {
   const { dob, email, name, role, userId } = useAuthState()
@@ -12,14 +13,8 @@ const UserDetails = () => {
   return (
     <AppLayout>
       <div className='flex flex-col justify-between items-center bg-slate-600 rounded-lg h-96 text-white p-10 gap-4'>
-        <div className='font-semibold text-5xl text-slate-200 flex flex-col items-center'>
-          <img
-            src='https://img.freepik.com/premium-vector/person-avatar-icon-design-vector-multiple-use-vector-illustration_625349-280.jpg?w=740'
-            width={120}
-            height={120}
-            className='rounded-full'
-          />
-          <p>{name}</p>
+        <div className='font-semibold text-7xl border border-primary rounded-full h-32 w-32 justify-center text-white bg-slate-800 flex flex-col items-center'>
+          <p>{getNameInitials(name).toUpperCase()}</p>
         </div>
 
         <div className='flex gap-4 w-full justify-between bg-slate-900 px-4 py-2 rounded-lg text-2xl'>

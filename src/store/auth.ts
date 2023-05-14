@@ -10,6 +10,7 @@ interface AuthState {
   name: string
   email: string
   dob: string
+  isApproved: boolean
 
   setUserDetails: (data: ISignupProps) => void
 }
@@ -22,6 +23,7 @@ export const useAuthState = create(
       email: '',
       name: '',
       userId: '',
+      isApproved: false,
 
       setUserDetails(data) {
         set({ ...data })

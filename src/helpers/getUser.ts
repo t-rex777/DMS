@@ -1,5 +1,5 @@
 export const getUser = (payload: unknown[]) => {
-  const [userId, name, email, _password, role, _isApproved, dob] = payload
+  const [userId, name, email, _password, role, isApproved, dob] = payload
 
   return {
     userId,
@@ -7,5 +7,6 @@ export const getUser = (payload: unknown[]) => {
     email,
     role,
     dob,
+    isApproved,
   }
 }

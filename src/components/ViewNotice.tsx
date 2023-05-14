@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { IUploadNoticeProps, getNotice, getNoticeDropdowns } from '../api/notice'
+import { IUploadNoticeProps, getNotice, getBatches } from '../api/notice'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { getAllCourses } from '../api/course'
+import { useAuthState } from '../store/auth'
 
 const ViewNotice = () => {
   const [notice, setNotice] = useState('')
+  const { userId } = useAuthState()
 
   const [batches, setBatches] = useState([])
   const [courses, setCourses] = useState([])
@@ -12,9 +15,10 @@ const ViewNotice = () => {
 
   useEffect(() => {
     void (async () => {
-      const res = await getNoticeDropdowns()
-      setBatches(res.data.batches)
-      setCourses(res.data.courses)
+      const data1 = await getBatches()
+      const data2 = await getAllCourses(Number(userId))
+      setBatches(data1.data.result)
+      setCourses(data2.data.result)
     })()
   }, [])
 

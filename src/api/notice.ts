@@ -15,6 +15,6 @@ export async function getNotice(data: Pick<IUploadNoticeProps, 'batchId' | 'cour
   return await dmsInstance.post('/viewNotice', { ...data })
 }
 
-export async function getNoticeDropdowns() {
+export async function getBatches() {
   return await dmsInstance.get('/viewNotice')
 }
