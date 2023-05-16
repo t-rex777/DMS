@@ -106,10 +106,11 @@ const facultyNavList: IListType[] = [
     label: 'Notice',
     link: '/notice',
   },
+
   {
     id: 6,
-    label: 'Time Table',
-    link: '/timetable',
+    label: 'Student Details',
+    link: '/students',
   },
 ]
 
@@ -183,8 +184,8 @@ const Sidebar = () => {
         ))}
       </div>
       <div>
-        <p className='text-primary'>{name}</p>
-        <p className='text-primary'>{email}</p>
+        <p className='text-primary truncate'>{name}</p>
+        <p className='text-primary truncate'>{email}</p>
       </div>
     </div>
   )

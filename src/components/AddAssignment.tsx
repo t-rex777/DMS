@@ -28,18 +28,20 @@ const AddAssignment = () => {
 
   const { userId } = useAuthState()
 
+  const { control, register, handleSubmit, setValue } = useForm<IQuestions>({
+    defaultValues: { questions: ['question 1'], batch: '', course: '' },
+  })
+
   useEffect(() => {
     void (async () => {
       const res = await getAssignmentDropdown(userId)
 
       setBatches(res.data.result[0].batches)
       setCourses(res.data.result[1].courses)
+      setValue('batch', res.data.result[0].batches[0]?.batch_id)
+      setValue('course', res.data.result[1].courses[0]?.course_id)
     })()
   }, [])
-
-  const { control, register, handleSubmit } = useForm<IQuestions>({
-    defaultValues: { questions: ['question 1'], batch: '', course: '' },
-  })
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -57,8 +59,6 @@ const AddAssignment = () => {
     })
   }
 
-  console.log({ batches, courses })
-
   return (
     <AppLayout>
       {batches.length === 0 || courses.length === 0 ? (
@@ -66,11 +66,9 @@ const AddAssignment = () => {
       ) : (
         <div className='flex flex-col gap-4'>
           <div className='form-control w-full max-w-sm'>
-            <div className='font-semibold'>Upload the Assignment</div>
+            <div className='font-semibold mb-4'>Upload the Assignment</div>
 
-            <label className='label'>
-              <span className='label-text'>Pick the Batch</span>
-            </label>
+            <label>Pick the Batch</label>
             <select
               {...register('batch', { required: true })}
               className='select select-primary w-full max-w-sm'
@@ -84,9 +82,8 @@ const AddAssignment = () => {
           </div>
 
           <div className='form-control w-full max-w-sm'>
-            <label className='label'>
-              <span className='label-text'>Pick the course</span>
-            </label>
+            <label>Pick the Course</label>
+
             <select
               {...register('course', { required: true })}
               className='select select-primary w-full max-w-sm'
@@ -100,23 +97,24 @@ const AddAssignment = () => {
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className='flex gap-4'>
-            <div className='w-full flex flex-col gap-4'>
-              <label className='label'>
-                <span className='label-text -mb-4'>Enter the questions</span>
-              </label>
-              {fields.map((field, index) => (
-                <div key={field.id} className='flex gap-4 items-center'>
-                  <input
-                    {...register(`questions.${index}`)}
-                    type='text'
-                    placeholder={`question ${index + 1}`}
-                    className='input input-bordered input-primary w-full max-w-sm'
-                  />
-                  <p className='cursor-pointer' onClick={() => remove(index)}>
-                    &#10005;
-                  </p>
-                </div>
-              ))}
+            <div className='w-full flex flex-col'>
+              <label>Enter the question</label>
+
+              <div className='flex flex-col gap-2'>
+                {fields.map((field, index) => (
+                  <div key={field.id} className='flex gap-4 items-center'>
+                    <input
+                      {...register(`questions.${index}`)}
+                      type='text'
+                      placeholder={`question ${index + 1}`}
+                      className='input input-bordered input-primary w-full max-w-sm'
+                    />
+                    <p className='cursor-pointer' onClick={() => remove(index)}>
+                      &#10005;
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
             <div className='flex w-full max-w-xs gap-4 items-end'>
               <button type='button' className='btn btn-primary w-40' onClick={addQuestion}>

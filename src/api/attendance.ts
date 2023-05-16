@@ -6,15 +6,15 @@ export interface IGetStudentsProps {
   courseId: string
 }
 export interface IUploadAttendanceProps {
-  userId: string
-  batchId: string
-  courseId: string
+  user_id: string
+  batch_id: string
+  course_id: string
   date: string
-  students_list: string[]
-  attendance_list: boolean[]
+  students_list: number[]
+  attendance_list: number[]
 }
 
-export async function uploadAttendance(data: IUploadAttendanceProps) {
+export async function uploadAttendance({ batch_id, ...data }: IUploadAttendanceProps) {
   return await dmsInstance.post('/uploadAttendance', { ...data })
 }
 
