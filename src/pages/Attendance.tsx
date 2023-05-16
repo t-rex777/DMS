@@ -7,7 +7,7 @@ import AppLayout from '../AppLayout'
 const Attendance = () => {
   const { role } = useAuthState()
 
-  return <AppLayout>{role !== 'student' ? <ViewAttendance /> : <AddAttendance />}</AppLayout>
+  return <AppLayout>{role === 'student' ? <ViewAttendance /> : <AddAttendance />}</AppLayout>
 }
 
 export default Attendance

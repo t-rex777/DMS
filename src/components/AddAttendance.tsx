@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useAuthState } from '../store/auth'
-import {
-  IUploadAttendanceProps,
-  getAttendanceDropdowns,
-  getStudentsList,
-  uploadAttendance,
-} from '../api/attendance'
+import { IUploadAttendanceProps, uploadAttendance } from '../api/attendance'
+import { getAssignmentDropdown } from '../api/assignment'
+import { getAllStudents, getStudentsOfaCourse } from '../api/students'
+import { getUser } from '../helpers/getUser'
+import { IUserDetails } from './ApprovalTable'
+import { format } from 'date-fns'
 
 export interface IBatch {
   batch_id: string
@@ -25,46 +25,56 @@ const AddAttendance = () => {
 
   const [students, setStudents] = useState([])
 
-  const [batches, setBatches] = useState<IBatch[]>([
-    { batch_code: 'rwg', batch_id: 'gr', batch_name: 'rwg' },
-  ])
-  const [courses, setCourses] = useState<ICourse[]>([
-    { course_code: 'rgw', course_id: 'rwg', course_name: 'rwg' },
-  ])
+  const [batches, setBatches] = useState<IBatch[]>([])
+  const [courses, setCourses] = useState<ICourse[]>([])
 
-  const { register, handleSubmit, watch } = useForm<IUploadAttendanceProps>()
+  const { register, handleSubmit, watch, setValue } = useForm<IUploadAttendanceProps>()
 
-  const courseId = watch('courseId')
-  const batchId = watch('batchId')
+  const course_id = watch('course_id')
 
   useEffect(() => {
     void (async () => {
-      const res = await getAttendanceDropdowns(userId)
+      const res = await getAssignmentDropdown(userId)
 
-      setBatches(res.data.batches)
-      setCourses(res.data.courses)
+      setBatches(res.data.result[0].batches)
+      setCourses(res.data.result[1].courses)
+      setValue('batch_id', res.data.result[0].batches[0]?.batch_id)
+      setValue('course_id', res.data.result[1].courses[0]?.course_id)
     })()
   }, [])
 
   const onSubmit: SubmitHandler<IUploadAttendanceProps> = async (data) => {
     await uploadAttendance({
       ...data,
-      students_list: students.map((s) => s.userId),
-      attendance_list: students.map((s) => data.attendance_list.includes(s.userId as any)),
-      userId,
+      students_list: students.map((s: IUserDetails) => Number(s.userId)),
+      attendance_list: students.map((s: IUserDetails) => {
+        return Number((data.attendance_list as unknown as string[]).includes(s.userId.toString()))
+      }),
+      user_id: userId,
+      date: format(new Date(), 'dd/mm/yyyy'),
     })
   }
 
   useEffect(() => {
+    if (!course_id) return
+
     void (async () => {
-      const res = await getStudentsList({
-        batchId,
-        courseId,
-        userId,
-      })
-      setStudents(res.data)
+      const {
+        data: { result: students },
+      } = await getStudentsOfaCourse(course_id)
+
+      const {
+        data: { result: studentsList },
+      } = await getAllStudents()
+      console.log({ studentsList, students })
+
+      setStudents(
+        studentsList
+          .filter((d: any) => students.some((s: any) => s.student_user_id === d[0]))
+          .map(getUser),
+      )
     })()
-  }, [])
+  }, [course_id])
 
   return (
     <div className='flex flex-col gap-4'>
@@ -76,7 +86,7 @@ const AddAttendance = () => {
             <span className='label-text'>Pick the Batch</span>
           </label>
           <select
-            {...register('batchId', { required: true })}
+            {...register('batch_id', { required: true })}
             className='select select-primary w-full max-w-xs'
           >
             {batches.map(({ batch_code, batch_id, batch_name }) => (
@@ -92,7 +102,7 @@ const AddAttendance = () => {
             <span className='label-text'>Pick the course</span>
           </label>
           <select
-            {...register('courseId', { required: true })}
+            {...register('course_id', { required: true })}
             className='select select-primary w-full max-w-xs'
           >
             {courses.map(({ course_code, course_id, course_name }) => (

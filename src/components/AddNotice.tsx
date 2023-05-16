@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { IUploadNoticeProps, getBatches, uploadNotice } from '../api/notice'
+import { IUploadNoticeProps, uploadNotice } from '../api/notice'
 import { useAuthState } from '../store/auth'
+import { getAssignmentDropdown } from '../api/assignment'
 
 export interface IBatch {
   batch_id: string
@@ -18,43 +19,39 @@ export interface ICourse {
 const AddNotice = () => {
   const { userId } = useAuthState()
 
-  const [batches, setBatches] = useState<IBatch[]>([
-    { batch_code: 'rwg', batch_id: 'gr', batch_name: 'rwg' },
-  ])
-  const [courses, setCourses] = useState<ICourse[]>([
-    { course_code: 'rgw', course_id: 'rwg', course_name: 'rwg' },
-  ])
+  const [batches, setBatches] = useState<IBatch[]>([])
+  const [courses, setCourses] = useState<ICourse[]>([])
+
+  const { register, handleSubmit, setValue } = useForm<IUploadNoticeProps>()
 
   useEffect(() => {
     void (async () => {
-      const res = await getBatches()
+      const res = await getAssignmentDropdown(userId)
 
-      setBatches(res.data.batches)
-      setCourses(res.data.courses)
+      setBatches(res.data.result[0].batches)
+      setCourses(res.data.result[1].courses)
+      setValue('batch_id', res.data.result[0].batches[0]?.batch_id)
+      setValue('course_id', res.data.result[1].courses[0]?.course_id)
     })()
   }, [])
-
-  const { register, handleSubmit } = useForm<IUploadNoticeProps>()
 
   const onSubmit: SubmitHandler<IUploadNoticeProps> = async (data) => {
     await uploadNotice({
       ...data,
-      userId,
+      user_id: userId,
     })
   }
 
   return (
     <div className='flex flex-col gap-4'>
       <form onSubmit={handleSubmit(onSubmit)} className='flex gap-4 flex-col'>
-        <div className='form-control w-full max-w-xs'>
-          <div className='font-semibold'>Upload the Notice</div>
+        <div className='form-control w-full max-w-sm'>
+          <div className='font-semibold mb-4'>Upload the Notice</div>
 
-          <label className='label'>
-            <span className='label-text'>Pick the Batch</span>
-          </label>
+          <label>Pick the Batch</label>
           <select
-            {...register('batchId', { required: true })}
-            className='select select-primary w-full max-w-xs'
+            {...register('batch_id', { required: true })}
+            className='select select-primary w-full max-w-sm'
           >
             {batches.map(({ batch_code, batch_id, batch_name }) => (
               <option key={batch_code} value={batch_id}>
@@ -64,13 +61,12 @@ const AddNotice = () => {
           </select>
         </div>
 
-        <div className='form-control w-full max-w-xs'>
-          <label className='label'>
-            <span className='label-text'>Pick the course</span>
-          </label>
+        <div className='form-control w-full max-w-sm'>
+          <label>Pick the Course</label>
+
           <select
-            {...register('courseId', { required: true })}
-            className='select select-primary w-full max-w-xs'
+            {...register('course_id', { required: true })}
+            className='select select-primary w-full max-w-sm'
           >
             {courses.map(({ course_code, course_id, course_name }) => (
               <option key={course_code} value={course_id}>
@@ -80,15 +76,14 @@ const AddNotice = () => {
           </select>
         </div>
 
-        <div className='w-full flex flex-col gap-4'>
-          <label className='label'>
-            <span className='label-text -mb-4'>Write the Notice</span>
-          </label>
+        <div className='w-full flex flex-col'>
+          <label>Write the notice</label>
+
           <textarea
-            {...register('noticeData')}
+            {...register('notice_data')}
             rows={5}
-            className='textarea textarea-primary w-full max-w-xs'
-            placeholder='Bio'
+            className='textarea textarea-primary w-full max-w-sm'
+            placeholder='Notice'
           ></textarea>
         </div>
 
