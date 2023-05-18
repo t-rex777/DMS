@@ -15,6 +15,6 @@ export async function getTimeTableDropdown() {
   return await dmsInstance.get('/viewNotice')
 }
 
-export async function getTimeTable(userId: string) {
-  return await dmsInstance.get('/viewTimeTable', { data: userId })
+export async function getTimeTable(user_id: string) {
+  return await dmsInstance.get('/viewTimetable', { params: { user_id } })
 }

@@ -9,11 +9,7 @@ const Result = () => {
 
   const type = role === 'staff' ? 'External' : 'Internal'
 
-  return (
-    <AppLayout>
-      {role === 'student' ? <ViewResult type={type} /> : <AddResult type={type} />}
-    </AppLayout>
-  )
+  return <AppLayout>{role === 'student' ? <ViewResult /> : <AddResult type={type} />}</AppLayout>
 }
 
 export default Result

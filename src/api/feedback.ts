@@ -1,10 +1,9 @@
 import { dmsInstance } from '.'
 
 export interface IUploadFeedbackProps {
-  userId: string
-  courseId: string
-  batchId: string
-  feedbackData: string
+  user_id: string
+  course_id: string
+  feedback: string
 }
 
 export async function uploadFeedback(data: IUploadFeedbackProps) {
@@ -17,4 +16,8 @@ export async function getFeedbackDropdown(userId: string) {
 
 export async function getAllFeedback(user_id: string) {
   return await dmsInstance.post('/getAllFeedbacks', { user_id })
+}
+
+export async function getAllCoursesForStudents(user_id: string) {
+  return await dmsInstance.get('/feedback', { params: { user_id } })
 }

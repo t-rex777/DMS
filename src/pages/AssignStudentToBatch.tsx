@@ -29,7 +29,8 @@ const AssignStudentToBatch = () => {
   const onSubmit: SubmitHandler<IAssignStudentToBatch> = async (data) => {
     await assignStudentToBatch({
       ...data,
-      id: userId,
+      user_id: userId,
+      id: data.user_id,
     })
   }
 
