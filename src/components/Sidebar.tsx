@@ -11,7 +11,7 @@ const adminNavList: IListType[] = [
   {
     id: 1,
     link: '/approvals',
-    label: 'Staff Verification',
+    label: 'Users Approvals',
   },
 
   {
@@ -40,6 +40,12 @@ const adminNavList: IListType[] = [
 ]
 
 const staffNavList: IListType[] = [
+  {
+    id: 1,
+    label: 'User details',
+    link: '/user-details',
+  },
+
   {
     id: 2,
     label: 'Student Details',
@@ -123,8 +129,8 @@ const studentNavList: IListType[] = [
 
   {
     id: 2,
-    label: 'Internal Result',
-    link: '/result',
+    label: 'Results',
+    link: '/results',
   },
 
   {
@@ -140,13 +146,9 @@ const studentNavList: IListType[] = [
   {
     id: 5,
     label: 'Feedback',
-    link: '/feedback',
+    link: '/feedbacks',
   },
-  {
-    id: 6,
-    label: 'Result',
-    link: '/result',
-  },
+
   {
     id: 7,
     label: 'Notice',

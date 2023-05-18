@@ -46,7 +46,7 @@ function App() {
           <Route element={<Assignment />} path='/assignment' />
           <Route element={<ResetPassword />} path='/resetpassword' />
           <Route element={<Notice />} path='/notice' />
-          <Route element={<Result />} path='/result' />
+          <Route element={<Result />} path='/results' />
           <Route element={<Attendance />} path='/attendance' />
           <Route element={<Feedback />} path='/feedbacks' />
           <Route element={<StudentsList />} path='/students' />

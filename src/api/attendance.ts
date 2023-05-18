@@ -14,6 +14,11 @@ export interface IUploadAttendanceProps {
   attendance_list: number[]
 }
 
+export interface IViewAttendanceProps {
+  user_id: string
+  course_id: string
+}
+
 export async function uploadAttendance({ batch_id, ...data }: IUploadAttendanceProps) {
   return await dmsInstance.post('/uploadAttendance', { ...data })
 }
@@ -24,4 +29,8 @@ export async function getAttendanceDropdowns(userId: string) {
 
 export async function getStudentsList(data: IGetStudentsProps) {
   return await dmsInstance.get('/students', { ...data } as any)
+}
+
+export async function viewAttendance(data: IViewAttendanceProps) {
+  return await dmsInstance.post('/viewAttendance', { ...data } as any)
 }
