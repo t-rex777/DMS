@@ -3,6 +3,7 @@ import AppLayout from '../AppLayout'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useAuthState } from '../store/auth'
 import { IAddPlacementCompany, addPlacementCompany } from '../api/placement'
+import { toast } from 'react-toastify'
 
 const AddPlacementCompany = () => {
   const { register, handleSubmit } = useForm<IAddPlacementCompany>()
@@ -10,10 +11,16 @@ const AddPlacementCompany = () => {
   const { userId } = useAuthState()
 
   const onSubmit: SubmitHandler<IAddPlacementCompany> = async (data) => {
-    await addPlacementCompany({
-      ...data,
-      user_id: userId,
-    })
+    try {
+      const { data: result } = await addPlacementCompany({
+        ...data,
+        user_id: userId,
+      })
+      if (result === false) throw new Error('Something went wrong!')
+      toast.success('Placement added successfully!')
+    } catch (error: any) {
+      toast.error(error.message)
+    }
   }
 
   return (

@@ -7,6 +7,7 @@ import { IBatch } from '../components/AddNotice'
 import { getBatches } from '../api/notice'
 import { getUser } from '../helpers/getUser'
 import AppLayout from '../AppLayout'
+import { toast } from 'react-toastify'
 
 const AssignStudentToBatch = () => {
   const { userId } = useAuthState()
@@ -27,11 +28,19 @@ const AssignStudentToBatch = () => {
   }, [])
 
   const onSubmit: SubmitHandler<IAssignStudentToBatch> = async (data) => {
-    await assignStudentToBatch({
-      ...data,
-      user_id: userId,
-      id: data.user_id,
-    })
+    try {
+      const {
+        data: { result },
+      } = await assignStudentToBatch({
+        ...data,
+        user_id: userId,
+        id: data.user_id,
+      })
+      if (result === false) throw new Error('Something went wrong!')
+      toast.success('Student added to course successfully')
+    } catch (error: any) {
+      toast.error(error.message)
+    }
   }
 
   return (

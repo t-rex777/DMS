@@ -3,14 +3,25 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { TRole } from '../store/auth'
 import { ISignupProps, signup } from '../api/auth'
 import { useNavigate } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const Signup = () => {
   const { register, handleSubmit } = useForm<ISignupProps>()
   const navigate = useNavigate()
 
   const onSubmit: SubmitHandler<ISignupProps> = async (data) => {
-    await signup(data)
-    navigate('/login')
+    try {
+      const { data: result } = await signup(data)
+      if (result === false) throw new Error('Something went wrong, please try again')
+      toast.success('Signed up successfully!')
+
+      setTimeout(() => {
+        navigate('/login')
+      }, 2000)
+    } catch (error) {
+      toast.error(error.message)
+    }
   }
 
   const roles: TRole[] = ['admin', 'faculty', 'staff', 'student']
@@ -20,6 +31,18 @@ const Signup = () => {
       onSubmit={handleSubmit(onSubmit)}
       className='bg-secondary w-screen h-screen flex flex-col justify-center items-center gap-2'
     >
+      <ToastContainer
+        position='top-right'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme='dark'
+      />
       <input
         {...register('name', { required: true })}
         placeholder='Name'

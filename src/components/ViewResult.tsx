@@ -42,11 +42,11 @@ const ViewResult = () => {
 
   return (
     <div>
+      <div className='mb-3 font-semibold text-3xl'>Result</div>
       {error ? (
-        <div>Internal Error 500, Please check if you have assigned a batch</div>
+        <div>You have not assigned any batch and course</div>
       ) : (
         <>
-          <div className='mb-3 font-semibold text-3xl'>Result</div>
           <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
             <label>Select a course</label>
             <select

@@ -5,6 +5,7 @@ import { IUploadExternalResultsProps, uploadExternalResult } from '../api/extern
 import { IUploadInternalResultsProps, uploadInternalResult } from '../api/internalResult'
 import { IBatchesAndCourses } from './AddTimetable'
 import { getTimeTableDropdown } from '../api/timetable'
+import { toast } from 'react-toastify'
 
 export interface IBatch {
   batch_id: string
@@ -50,20 +51,29 @@ const AddResult = ({ type }: IAddResutType) => {
   const onSubmit: SubmitHandler<
     IUploadExternalResultsProps | IUploadInternalResultsProps
   > = async ({ batch_id, course_id, data }) => {
-    const api = type === 'External' ? uploadExternalResult : uploadInternalResult
+    try {
+      const api = type === 'External' ? uploadExternalResult : uploadInternalResult
 
-    const reader = new FileReader()
-    reader.readAsDataURL(data[0] as unknown as Blob)
+      const reader = new FileReader()
+      reader.readAsDataURL(data[0] as unknown as Blob)
 
-    reader.onload = async () => {
-      const base64Image = 'data:image/png;base64,' + (reader.result as string)?.split(',')[1]
+      reader.onload = async () => {
+        const base64Image = 'data:image/png;base64,' + (reader.result as string)?.split(',')[1]
 
-      await api({
-        batch_id,
-        course_id,
-        data: base64Image,
-        user_id: userId,
-      })
+        const {
+          data: { result },
+        } = await api({
+          batch_id,
+          course_id,
+          data: base64Image,
+          user_id: userId,
+        })
+
+        if (!result) throw new Error('Something went wrong!')
+        toast.success('Result uploaded successfully')
+      }
+    } catch (error: any) {
+      toast.error(error.message)
     }
   }
 

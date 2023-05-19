@@ -24,6 +24,7 @@ import AddPlacementCompany from './pages/AddPlacementCompany'
 import AddStudentPlacement from './pages/AddStudentPlacement'
 import AssignStudentToBatch from './pages/AssignStudentToBatch'
 import EditStudentDetails from './pages/EditStudentDetails'
+import StudentPlacement from './pages/StudentPlacement'
 
 // todo: make separate routes for each role
 function App() {
@@ -54,6 +55,7 @@ function App() {
           <Route element={<AddStudentPlacement />} path='/student-placement' />
           <Route element={<AssignStudentToBatch />} path='/assign-student' />
           <Route element={<EditStudentDetails />} path='/edit-student/:studentId' />
+          <Route element={<StudentPlacement />} path='/view-student-placement' />
         </Route>
 
         <Route element={<ErrorPage />} path='*' />

@@ -6,6 +6,7 @@ import { useAuthState } from '../store/auth'
 import { getUser } from '../helpers/getUser'
 import { IUserDetails } from '../components/ApprovalTable'
 import { ICourse } from '../components/AddNotice'
+import { toast } from 'react-toastify'
 
 const AssignCourse = () => {
   const { register, handleSubmit } = useForm<IAssignCourseParams>()
@@ -30,17 +31,27 @@ const AssignCourse = () => {
   }, [])
 
   const onSubmit: SubmitHandler<IAssignCourseParams> = async (data) => {
-    if (
-      data.course_id.toString() === 'Pick the course' ||
-      data.faculty_id.toString() === 'Pick the faculty'
-    )
-      return
+    try {
+      if (
+        data.course_id.toString() === 'Pick the course' ||
+        data.faculty_id.toString() === 'Pick the faculty'
+      )
+        return
 
-    await assignCourse({
-      user_id: Number(userId),
-      course_id: data.course_id,
-      faculty_id: data.faculty_id,
-    })
+      const {
+        data: { result },
+      } = await assignCourse({
+        user_id: Number(userId),
+        course_id: data.course_id,
+        faculty_id: data.faculty_id,
+      })
+
+      if (result === false) throw new Error('Something went wrong!')
+
+      toast.success('Course assigned successfully!')
+    } catch (error: any) {
+      toast.error(error.message)
+    }
   }
 
   return (

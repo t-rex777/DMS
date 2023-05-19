@@ -10,6 +10,7 @@ import {
 import { getAllStudents } from '../api/students'
 import { getUser } from '../helpers/getUser'
 import { IUserDetails } from '../components/ApprovalTable'
+import { toast } from 'react-toastify'
 
 export interface IPlacementCompany {
   company_code: string
@@ -36,10 +37,18 @@ const AddStudentPlacement = () => {
   }, [])
 
   const onSubmit: SubmitHandler<IAddStudentPlacement> = async (data) => {
-    await addStudentPlacement({
-      ...data,
-      user_id: userId,
-    })
+    try {
+      const { data: result } = await addStudentPlacement({
+        ...data,
+        user_id: userId,
+      })
+
+      if (result === false) throw new Error('Something went wrong!')
+
+      toast.success('Student placement added successfully!')
+    } catch (error: any) {
+      toast.error(error.message)
+    }
   }
 
   return (

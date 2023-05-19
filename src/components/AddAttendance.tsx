@@ -7,6 +7,7 @@ import { getAllStudents, getStudentsOfaCourse } from '../api/students'
 import { getUser } from '../helpers/getUser'
 import { IUserDetails } from './ApprovalTable'
 import { format } from 'date-fns'
+import { toast } from 'react-toastify'
 
 export interface IBatch {
   batch_id: string
@@ -44,15 +45,24 @@ const AddAttendance = () => {
   }, [])
 
   const onSubmit: SubmitHandler<IUploadAttendanceProps> = async (data) => {
-    await uploadAttendance({
-      ...data,
-      students_list: students.map((s: IUserDetails) => Number(s.userId)),
-      attendance_list: students.map((s: IUserDetails) => {
-        return Number((data.attendance_list as unknown as string[]).includes(s.userId.toString()))
-      }),
-      user_id: userId,
-      date: format(new Date(), 'dd/mm/yyyy'),
-    })
+    try {
+      const {
+        data: { result },
+      } = await uploadAttendance({
+        ...data,
+        students_list: students.map((s: IUserDetails) => Number(s.userId)),
+        attendance_list: students.map((s: IUserDetails) => {
+          return Number((data.attendance_list as unknown as string[]).includes(s.userId.toString()))
+        }),
+        user_id: userId,
+        date: format(new Date(), 'dd/mm/yyyy'),
+      })
+
+      if (result === false) throw new Error('Something went wrong!')
+      toast.success('Attendance uploaded successfully!')
+    } catch (error: any) {
+      toast.error(error.message)
+    }
   }
 
   useEffect(() => {
