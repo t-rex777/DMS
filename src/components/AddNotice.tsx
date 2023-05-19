@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { IUploadNoticeProps, uploadNotice } from '../api/notice'
 import { useAuthState } from '../store/auth'
 import { getAssignmentDropdown } from '../api/assignment'
+import { toast } from 'react-toastify'
 
 export interface IBatch {
   batch_id: string
@@ -36,10 +37,18 @@ const AddNotice = () => {
   }, [])
 
   const onSubmit: SubmitHandler<IUploadNoticeProps> = async (data) => {
-    await uploadNotice({
-      ...data,
-      user_id: userId,
-    })
+    try {
+      const {
+        data: { result },
+      } = await uploadNotice({
+        ...data,
+        user_id: userId,
+      })
+      if (result === false) throw new Error('Something went wrong!')
+      toast.success('Notice uploaded successfully!')
+    } catch (error: any) {
+      toast.error(error.message)
+    }
   }
 
   return (

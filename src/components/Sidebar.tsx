@@ -61,7 +61,7 @@ const staffNavList: IListType[] = [
   {
     id: 5,
     label: 'External Result',
-    link: '/result',
+    link: '/results',
   },
 
   {
@@ -92,7 +92,7 @@ const facultyNavList: IListType[] = [
   {
     id: 2,
     label: 'Internal Result',
-    link: '/result',
+    link: '/results',
   },
 
   {
@@ -158,6 +158,11 @@ const studentNavList: IListType[] = [
     id: 8,
     label: 'Attendance',
     link: '/attendance',
+  },
+  {
+    id: 9,
+    label: 'Placement',
+    link: '/view-student-placement',
   },
 ]
 

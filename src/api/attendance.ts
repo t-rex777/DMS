@@ -17,6 +17,7 @@ export interface IUploadAttendanceProps {
 export interface IViewAttendanceProps {
   user_id: string
   course_id: string
+  date: string
 }
 
 export async function uploadAttendance({ batch_id, ...data }: IUploadAttendanceProps) {
@@ -33,4 +34,8 @@ export async function getStudentsList(data: IGetStudentsProps) {
 
 export async function viewAttendance(data: IViewAttendanceProps) {
   return await dmsInstance.post('/viewAttendance', { ...data } as any)
+}
+
+export async function getAllOperationDates() {
+  return await dmsInstance.get('/getAllOperationDates')
 }

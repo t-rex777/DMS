@@ -3,6 +3,7 @@ import AppLayout from '../AppLayout'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { addCourse } from '../api/course'
 import { useAuthState } from '../store/auth'
+import { toast } from 'react-toastify'
 
 export interface IAddCourse {
   courseName: string
@@ -15,11 +16,19 @@ const AddCourse = () => {
   const { userId } = useAuthState()
 
   const onSubmit: SubmitHandler<IAddCourse> = async (data) => {
-    await addCourse({
-      user_id: Number(userId),
-      course_code: data.courseCode,
-      course_name: data.courseName,
-    })
+    try {
+      const {
+        data: { result },
+      } = await addCourse({
+        user_id: Number(userId),
+        course_code: data.courseCode,
+        course_name: data.courseName,
+      })
+      if (result === false) throw new Error('Please check for the valid values passes')
+      toast.success('Course added successfully')
+    } catch (error: any) {
+      toast.error(error.message)
+    }
   }
 
   return (

@@ -4,6 +4,8 @@ import { ILoginProps, login } from '../api/auth'
 import { useAuthState } from '../store/auth'
 import { useNavigate } from 'react-router-dom'
 import { getUser } from '../helpers/getUser'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const Login = () => {
   const { register, handleSubmit } = useForm<ILoginProps>()
@@ -15,8 +17,11 @@ const Login = () => {
     try {
       const res = await login(data)
       if (res.data.result === false) throw Error('Invalid credentials')
+      toast.success('Logged In')
 
-      navigate('/')
+      setTimeout(() => {
+        navigate('/')
+      }, 2000)
       const { dob, email, name, role, userId, isApproved } = getUser(res.data.result[0])
 
       setUserDetails({
@@ -27,13 +32,25 @@ const Login = () => {
         userId,
         isApproved,
       } as any)
-    } catch (error) {
-      console.error(error)
+    } catch (error: any) {
+      toast.error(error.message)
     }
   }
 
   return (
     <div>
+      <ToastContainer
+        position='top-right'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme='dark'
+      />
       <form
         onSubmit={handleSubmit(onSubmit)}
         className='bg-secondary w-screen h-screen flex flex-col justify-center items-center gap-2'

@@ -24,3 +24,7 @@ export async function addStudentPlacement(data: IAddStudentPlacement) {
 export async function getAllPlacementCompanies() {
   return await dmsInstance.get('/addPlacement')
 }
+
+export async function viewPlacementDetails(user_id: string) {
+  return await dmsInstance.get('/viewPlacement', { params: { user_id } })
+}

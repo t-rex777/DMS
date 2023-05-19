@@ -36,7 +36,7 @@ const ViewFeedback = () => {
   }, [])
 
   return (
-    <div>
+    <div className='flex flex-wrap gap-4'>
       {feedbacks.map(
         (
           {

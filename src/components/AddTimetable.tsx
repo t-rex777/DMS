@@ -3,6 +3,7 @@ import { IUploadTimeTableProps, getTimeTableDropdown, uploadTimeTable } from '..
 import { useAuthState } from '../store/auth'
 import { IBatch, ICourse } from './AddNotice'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
 export interface IBatchesAndCourses extends IBatch {
   courses: {
@@ -34,18 +35,26 @@ const AddTimetable = () => {
   const selectedBatch = watch('batch_id')
 
   const onSubmit: SubmitHandler<IUploadTimeTableProps> = async ({ batch_id, course_id, data }) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(data[0] as unknown as Blob)
+    try {
+      const reader = new FileReader()
+      reader.readAsDataURL(data[0] as unknown as Blob)
 
-    reader.onload = async () => {
-      const base64Image = 'data:image/png;base64,' + (reader.result as string)?.split(',')[1]
+      reader.onload = async () => {
+        const base64Image = 'data:image/png;base64,' + (reader.result as string)?.split(',')[1]
 
-      await uploadTimeTable({
-        batch_id,
-        course_id,
-        data: base64Image,
-        user_id: userId,
-      })
+        const { data: result } = await uploadTimeTable({
+          batch_id,
+          course_id,
+          data: base64Image,
+          user_id: userId,
+        })
+
+        if (!result) throw new Error('Something went wrong!')
+
+        toast.success('Timetable uploaded successfully')
+      }
+    } catch (error: any) {
+      toast.error(error.message)
     }
   }
 

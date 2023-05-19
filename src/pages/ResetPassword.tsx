@@ -3,6 +3,8 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { IResetPasswordProps, resetPassword } from '../api/auth'
 import { useAuthState } from '../store/auth'
 import { useNavigate } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const ResetPassword = () => {
   const { userId } = useAuthState()
@@ -11,7 +13,14 @@ const ResetPassword = () => {
   const { register, handleSubmit } = useForm<IResetPasswordProps>()
 
   const onSubmit: SubmitHandler<IResetPasswordProps> = async (data) => {
-    await resetPassword({ ...data, user_id: userId })
+    try {
+      const { data: result } = await resetPassword({ ...data, user_id: userId })
+      if (result.result === null) throw new Error('Something went wrong!')
+
+      toast.success('Password reset successfully!')
+    } catch (error: any) {
+      toast.error(error.message)
+    }
   }
 
   return (
@@ -19,6 +28,18 @@ const ResetPassword = () => {
       onSubmit={handleSubmit(onSubmit)}
       className='bg-secondary w-screen h-screen flex flex-col justify-center items-center gap-2'
     >
+      <ToastContainer
+        position='top-right'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme='dark'
+      />
       <input
         type='password'
         {...register('old_password', { required: true })}

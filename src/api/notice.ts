@@ -7,11 +7,13 @@ export interface IUploadNoticeProps {
   notice_data: string
 }
 
+export type IGetNoticeProps = Pick<IUploadNoticeProps, 'batch_id' | 'course_id'>
+
 export async function uploadNotice(data: IUploadNoticeProps) {
   return await dmsInstance.post('/notice', { ...data })
 }
 
-export async function getNotice(data: Pick<IUploadNoticeProps, 'batch_id' | 'course_id'>) {
+export async function getNotice(data: IGetNoticeProps) {
   return await dmsInstance.post('/viewNotice', { ...data })
 }
 

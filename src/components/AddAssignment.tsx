@@ -3,6 +3,7 @@ import AppLayout from '../AppLayout'
 import { getAssignmentDropdown, uploadAssignment } from '../api/assignment'
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import { useAuthState } from '../store/auth'
+import { toast } from 'react-toastify'
 
 interface IQuestions {
   questions: string[]
@@ -53,10 +54,19 @@ const AddAssignment = () => {
   }
 
   const onSubmit: SubmitHandler<IQuestions> = async (data) => {
-    await uploadAssignment({
-      ...data,
-      user_id: userId,
-    })
+    try {
+      const {
+        data: { result },
+      } = await uploadAssignment({
+        ...data,
+        user_id: userId,
+      })
+      if (result === false) throw new Error('Something went wrong!')
+
+      toast.success('Assignment Uploaded Successfully!')
+    } catch (error: any) {
+      toast.error(error.message)
+    }
   }
 
   return (
