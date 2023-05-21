@@ -1,31 +1,27 @@
 import React from 'react'
 import AppLayout from '../AppLayout'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { addCourse } from '../api/course'
+
 import { useAuthState } from '../store/auth'
 import { toast } from 'react-toastify'
+import { IAddBatchProps, addBatch } from '../api/batch'
 
-export interface IAddCourse {
-  courseName: string
-  courseCode: string
-}
-
-const AddCourse = () => {
-  const { register, handleSubmit } = useForm<IAddCourse>()
+const AddBatch = () => {
+  const { register, handleSubmit } = useForm<IAddBatchProps>()
 
   const { userId } = useAuthState()
 
-  const onSubmit: SubmitHandler<IAddCourse> = async (data) => {
+  const onSubmit: SubmitHandler<IAddBatchProps> = async ({ batch_code, batch_name }) => {
     try {
       const {
         data: { result },
-      } = await addCourse({
+      } = await addBatch({
+        batch_code,
+        batch_name,
         user_id: Number(userId),
-        course_code: data.courseCode,
-        course_name: data.courseName,
       })
       if (result === false) throw new Error('Please check for the valid values passed')
-      toast.success('Course added successfully')
+      toast.success('Batch added successfully')
     } catch (error) {
       toast.error(error.message)
     }
@@ -36,17 +32,17 @@ const AddCourse = () => {
       <div className='flex flex-col gap-4'>
         <form onSubmit={handleSubmit(onSubmit)} className='flex gap-4 flex-col'>
           <div className='form-control w-full max-w-sm'>
-            <div className='font-semibold mb-4'>Add a course</div>
+            <div className='font-semibold mb-4'>Add a batch</div>
 
             <div className='flex flex-col gap-4'>
               <input
-                {...register('courseCode', { required: true })}
-                placeholder='Course Code'
+                {...register('batch_code', { required: true })}
+                placeholder='Batch Code'
                 className='input input-bordered input-primary w-full'
               />
               <input
-                {...register('courseName', { required: true })}
-                placeholder='Course Name'
+                {...register('batch_name', { required: true })}
+                placeholder='Batch Name'
                 className='input input-bordered input-primary w-full'
               />
 
@@ -61,4 +57,4 @@ const AddCourse = () => {
   )
 }
 
-export default AddCourse
+export default AddBatch

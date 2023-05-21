@@ -16,14 +16,23 @@ const AssignStudentToBatch = () => {
 
   const [students, setStudents] = useState<IUserDetails[]>([])
   const [batches, setBatches] = useState<IBatch[]>([])
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     void (async () => {
-      const students = await getAllStudents()
-      const batches = await getBatches()
+      try {
+        const students = await getAllStudents()
+        const batches = await getBatches()
 
-      setStudents(students.data.result.map(getUser))
-      setBatches(batches.data.result)
+        if (students.data.result === false || batches.data.result === false) {
+          setError(true)
+          throw new Error('No batch or student available')
+        }
+        setStudents(students.data.result.map(getUser))
+        setBatches(batches.data.result)
+      } catch (error) {
+        toast.error(error.message)
+      }
     })()
   }, [])
 
@@ -38,54 +47,57 @@ const AssignStudentToBatch = () => {
       })
       if (result === false) throw new Error('Something went wrong!')
       toast.success('Student added to course successfully')
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message)
     }
   }
 
   return (
     <AppLayout>
-      <div className='flex flex-col gap-4'>
-        <form onSubmit={handleSubmit(onSubmit)} className='flex gap-4 flex-col'>
-          <div className='form-control w-full max-w-xs'>
-            <div className='font-semibold'>Upload the Notice</div>
+      <div className='font-semibold'>Upload the Notice</div>
+      {error ? (
+        <div>No batch or student available</div>
+      ) : (
+        <div className='flex flex-col gap-4'>
+          <form onSubmit={handleSubmit(onSubmit)} className='flex gap-4 flex-col'>
+            <div className='form-control w-full max-w-xs'>
+              <label className='label'>
+                <span className='label-text'>Pick the Batch</span>
+              </label>
+              <select
+                {...register('batch_id', { required: true })}
+                className='select select-primary w-full max-w-xs'
+              >
+                {batches.map(({ batch_code, batch_id, batch_name }) => (
+                  <option key={batch_code} value={batch_id}>
+                    {batch_name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-            <label className='label'>
-              <span className='label-text'>Pick the Batch</span>
-            </label>
-            <select
-              {...register('batch_id', { required: true })}
-              className='select select-primary w-full max-w-xs'
-            >
-              {batches.map(({ batch_code, batch_id, batch_name }) => (
-                <option key={batch_code} value={batch_id}>
-                  {batch_name}
-                </option>
-              ))}
-            </select>
-          </div>
+            <div className='form-control w-full max-w-xs'>
+              <label className='label'>
+                <span className='label-text'>Pick the student</span>
+              </label>
+              <select
+                {...register('user_id', { required: true })}
+                className='select select-primary w-full max-w-xs'
+              >
+                {students.map(({ name, userId }) => (
+                  <option key={userId} value={userId}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div className='form-control w-full max-w-xs'>
-            <label className='label'>
-              <span className='label-text'>Pick the student</span>
-            </label>
-            <select
-              {...register('user_id', { required: true })}
-              className='select select-primary w-full max-w-xs'
-            >
-              {students.map(({ name, userId }) => (
-                <option key={userId} value={userId}>
-                  {name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <button type='submit' className='btn btn-primary w-40'>
-            Add Student
-          </button>
-        </form>
-      </div>
+            <button type='submit' className='btn btn-primary w-40'>
+              Add Student
+            </button>
+          </form>
+        </div>
+      )}
     </AppLayout>
   )
 }

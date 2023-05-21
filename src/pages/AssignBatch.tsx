@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import AppLayout from '../AppLayout'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { IAssignCourseParams, assignCourse, getAllCourses, getAllFaculties } from '../api/course'
+import { IAssignCourseParams, assignCourse, getAllFaculties } from '../api/course'
 import { useAuthState } from '../store/auth'
 import { getUser } from '../helpers/getUser'
 import { IUserDetails } from '../components/ApprovalTable'
-import { ICourse } from '../components/AddNotice'
+import { IBatch } from '../components/AddNotice'
 import { toast } from 'react-toastify'
+import { IAssignBatch, assignBatch, getAllBatches } from '../api/batch'
 
-const AssignCourse = () => {
-  const { register, handleSubmit } = useForm<IAssignCourseParams>()
+const AssignBatch = () => {
+  const { register, handleSubmit } = useForm<IAssignBatch>()
   const { userId } = useAuthState()
 
   const [faculties, setFaculties] = useState<IUserDetails[]>([])
-  const [courses, setCourses] = useState<ICourse[]>([])
+  const [batches, setBatches] = useState<IBatch[]>([])
   const [error, setError] = useState(false)
 
   const fetchFaculties = async () => {
@@ -28,14 +29,15 @@ const AssignCourse = () => {
       toast.error(error.message)
     }
   }
-  const fetchCourses = async () => {
+
+  const fetchBatches = async () => {
     try {
-      const res = await getAllCourses(Number(userId))
+      const res = await getAllBatches(Number(userId))
+      setBatches(res.data.result)
       if (res.data.result === false) {
         setError(true)
-        throw new Error('No course available')
+        throw new Error('No batch available')
       }
-      setCourses(res.data.result)
     } catch (error) {
       toast.error(error.message)
     }
@@ -43,28 +45,29 @@ const AssignCourse = () => {
 
   useEffect(() => {
     fetchFaculties()
-    fetchCourses()
+    fetchBatches()
   }, [])
 
-  const onSubmit: SubmitHandler<IAssignCourseParams> = async (data) => {
+  const onSubmit: SubmitHandler<IAssignBatch> = async (data) => {
     try {
       if (
-        data.course_id.toString() === 'Pick the course' ||
-        data.faculty_id.toString() === 'Pick the faculty'
+        data.batch_id.toString() === 'Pick the batch' ||
+        data.user_id.toString() === 'Pick the faculty'
       )
-        throw new Error('Please enter the details')
+        return
 
       const {
         data: { result },
-      } = await assignCourse({
-        user_id: Number(userId),
-        course_id: data.course_id,
-        faculty_id: data.faculty_id,
+      } = await assignBatch({
+        id: Number(userId),
+        user_id: data.user_id,
+        batch_id: data.batch_id,
+        assign_to: 'faculty',
       })
 
       if (result === false) throw new Error('Something went wrong!')
 
-      toast.success('Course assigned successfully!')
+      toast.success('Batch assigned successfully!')
     } catch (error) {
       toast.error(error.message)
     }
@@ -72,16 +75,17 @@ const AssignCourse = () => {
 
   return (
     <AppLayout>
-      <div className='font-semibold'>Assign a course</div>
+      <div className='font-semibold'>Assign a batch</div>
+
       {error ? (
-        <div>Either faculty or batch is not available</div>
+        <div>Either faculty or course is not available</div>
       ) : (
         <div className='flex flex-col gap-4'>
           <form onSubmit={handleSubmit(onSubmit)} className='flex gap-4 flex-col'>
             <div className='form-control w-full max-w-sm'>
               <div className='flex flex-col gap-4'>
                 <select
-                  {...register('faculty_id', { required: true })}
+                  {...register('user_id', { required: true })}
                   className='select select-primary w-full max-w-sm'
                 >
                   <option disabled selected>
@@ -95,15 +99,15 @@ const AssignCourse = () => {
                 </select>
 
                 <select
-                  {...register('course_id', { required: true })}
+                  {...register('batch_id', { required: true })}
                   className='select select-primary w-full max-w-sm'
                 >
                   <option disabled selected>
-                    Pick the course
+                    Pick the batch
                   </option>
-                  {courses.map(({ course_id, course_name }) => (
-                    <option key={course_id} value={course_id}>
-                      {course_name}
+                  {batches.map(({ batch_id, batch_name }) => (
+                    <option key={batch_id} value={batch_id}>
+                      {batch_name}
                     </option>
                   ))}
                 </select>
@@ -119,4 +123,4 @@ const AssignCourse = () => {
   )
 }
 
-export default AssignCourse
+export default AssignBatch

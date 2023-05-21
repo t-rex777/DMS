@@ -50,7 +50,7 @@ const EditStudentDetails = () => {
       setTimeout(() => {
         navigate('/students')
       }, 2000)
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message)
     }
   }

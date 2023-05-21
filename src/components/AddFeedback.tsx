@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useAuthState } from '../store/auth'
-import {
-  IUploadFeedbackProps,
-  getAllCoursesForStudents,
-  getFeedbackDropdown,
-  uploadFeedback,
-} from '../api/feedback'
+import { IUploadFeedbackProps, getAllCoursesForStudents, uploadFeedback } from '../api/feedback'
 import { toast } from 'react-toastify'
 
 export interface IBatch {
@@ -33,10 +28,11 @@ const AddFeedback = () => {
         const res = await getAllCoursesForStudents(userId)
         if (res.data.result === false) {
           setError(true)
-          throw new Error('you have not assigned any batch and course')
+          throw new Error('You have not assigned any course')
         }
+        toast.success('Feedback added successfully')
         setCourses(res.data.result.courses)
-      } catch (error: any) {
+      } catch (error) {
         toast.error(error.message)
       }
     })()

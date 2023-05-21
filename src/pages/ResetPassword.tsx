@@ -18,7 +18,7 @@ const ResetPassword = () => {
       if (result.result === null) throw new Error('Something went wrong!')
 
       toast.success('Password reset successfully!')
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message)
     }
   }

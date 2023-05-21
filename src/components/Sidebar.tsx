@@ -13,27 +13,37 @@ const adminNavList: IListType[] = [
     link: '/approvals',
     label: 'Users Approvals',
   },
-
   {
     id: 2,
+    label: 'Add Batch',
+    link: '/add-batch',
+  },
+
+  {
+    id: 3,
+    label: 'Assign Batch',
+    link: '/assign-batch',
+  },
+  {
+    id: 4,
     label: 'Add Course',
     link: '/add-course',
   },
 
   {
-    id: 3,
+    id: 5,
     label: 'Assign Course',
     link: '/assign-course',
   },
 
   {
-    id: 4,
+    id: 6,
     label: 'User Details',
     link: '/user-details',
   },
 
   {
-    id: 5,
+    id: 7,
     label: 'Feedbacks',
     link: '/feedbacks',
   },

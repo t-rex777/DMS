@@ -22,17 +22,27 @@ const AddNotice = () => {
 
   const [batches, setBatches] = useState<IBatch[]>([])
   const [courses, setCourses] = useState<ICourse[]>([])
+  const [error, setError] = useState(false)
 
   const { register, handleSubmit, setValue } = useForm<IUploadNoticeProps>()
 
   useEffect(() => {
     void (async () => {
-      const res = await getAssignmentDropdown(userId)
+      try {
+        const res = await getAssignmentDropdown(userId)
 
-      setBatches(res.data.result[0].batches)
-      setCourses(res.data.result[1].courses)
-      setValue('batch_id', res.data.result[0].batches[0]?.batch_id)
-      setValue('course_id', res.data.result[1].courses[0]?.course_id)
+        if (res.data.result === false) {
+          setError(true)
+          throw new Error('You have not assigned any batch and course')
+        }
+
+        setBatches(res.data.result[0].batches)
+        setCourses(res.data.result[1].courses)
+        setValue('batch_id', res.data.result[0].batches[0]?.batch_id)
+        setValue('course_id', res.data.result[1].courses[0]?.course_id)
+      } catch (error) {
+        toast.error(error.message)
+      }
     })()
   }, [])
 
@@ -46,60 +56,63 @@ const AddNotice = () => {
       })
       if (result === false) throw new Error('Something went wrong!')
       toast.success('Notice uploaded successfully!')
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message)
     }
   }
 
   return (
     <div className='flex flex-col gap-4'>
-      <form onSubmit={handleSubmit(onSubmit)} className='flex gap-4 flex-col'>
-        <div className='form-control w-full max-w-sm'>
-          <div className='font-semibold mb-4'>Upload the Notice</div>
+      <div className='font-semibold'>Upload the Notice</div>
+      {error ? (
+        <div>You have not assigned any batch and course</div>
+      ) : (
+        <form onSubmit={handleSubmit(onSubmit)} className='flex gap-4 flex-col'>
+          <div className='form-control w-full max-w-sm'>
+            <label>Pick the Batch</label>
+            <select
+              {...register('batch_id', { required: true })}
+              className='select select-primary w-full max-w-sm'
+            >
+              {batches.map(({ batch_code, batch_id, batch_name }) => (
+                <option key={batch_code} value={batch_id}>
+                  {batch_name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-          <label>Pick the Batch</label>
-          <select
-            {...register('batch_id', { required: true })}
-            className='select select-primary w-full max-w-sm'
-          >
-            {batches.map(({ batch_code, batch_id, batch_name }) => (
-              <option key={batch_code} value={batch_id}>
-                {batch_name}
-              </option>
-            ))}
-          </select>
-        </div>
+          <div className='form-control w-full max-w-sm'>
+            <label>Pick the Course</label>
 
-        <div className='form-control w-full max-w-sm'>
-          <label>Pick the Course</label>
+            <select
+              {...register('course_id', { required: true })}
+              className='select select-primary w-full max-w-sm'
+            >
+              {courses.map(({ course_code, course_id, course_name }) => (
+                <option key={course_code} value={course_id}>
+                  {course_name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-          <select
-            {...register('course_id', { required: true })}
-            className='select select-primary w-full max-w-sm'
-          >
-            {courses.map(({ course_code, course_id, course_name }) => (
-              <option key={course_code} value={course_id}>
-                {course_name}
-              </option>
-            ))}
-          </select>
-        </div>
+          <div className='w-full flex flex-col'>
+            <label>Write the notice</label>
 
-        <div className='w-full flex flex-col'>
-          <label>Write the notice</label>
+            <textarea
+              {...register('notice_data')}
+              rows={5}
+              className='textarea textarea-primary w-full max-w-sm'
+              placeholder='Notice'
+            ></textarea>
+          </div>
 
-          <textarea
-            {...register('notice_data')}
-            rows={5}
-            className='textarea textarea-primary w-full max-w-sm'
-            placeholder='Notice'
-          ></textarea>
-        </div>
-
-        <button type='submit' className='btn btn-primary w-40'>
-          Upload
-        </button>
-      </form>
+          <button type='submit' className='btn btn-primary w-40'>
+            Upload
+          </button>
+        </form>
+      )}
     </div>
   )
 }
