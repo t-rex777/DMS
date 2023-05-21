@@ -32,7 +32,7 @@ const Login = () => {
         userId,
         isApproved,
       } as any)
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message)
     }
   }

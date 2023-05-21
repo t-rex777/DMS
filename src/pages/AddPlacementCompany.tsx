@@ -18,7 +18,7 @@ const AddPlacementCompany = () => {
       })
       if (result === false) throw new Error('Something went wrong!')
       toast.success('Placement added successfully!')
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message)
     }
   }

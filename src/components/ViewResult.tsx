@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { useAuthState } from '../store/auth'
 import { IGetResults, getAllStudentCourses, getResults } from '../api/result'
+import { toast } from 'react-toastify'
 
 export interface IResult {
   batchId: number
@@ -18,26 +19,45 @@ const ViewResult = () => {
   const [error, setError] = useState(false)
 
   const [courses, setCourses] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const { register, handleSubmit } = useForm<IGetResults>()
 
   useEffect(() => {
     void (async () => {
-      const res = await getAllStudentCourses(userId)
+      try {
+        const res = await getAllStudentCourses(userId)
 
-      if (res.data.result === false) return setError(true)
+        if (res.data.result === false) {
+          setError(true)
+          throw new Error('something went wrong')
+        }
 
-      setCourses(res.data.result.courses)
+        setCourses(res.data.result.courses)
+      } catch (error) {
+        toast.error(error.message)
+      }
     })()
   }, [])
 
   const onSubmit: SubmitHandler<IGetResults> = async (data) => {
-    const res = await getResults({
-      course_id: data.course_id,
-      user_id: userId,
-    })
+    setLoading(true)
+    try {
+      const res = await getResults({
+        course_id: data.course_id,
+        user_id: userId,
+      })
+      setLoading(false)
 
-    setResult(res.data.result)
+      if (res.data.result === false) {
+        setError(true)
+        throw new Error('No result available')
+      }
+
+      setResult(res.data.result)
+    } catch (error) {
+      toast.error(error.message)
+    }
   }
 
   return (
@@ -45,6 +65,8 @@ const ViewResult = () => {
       <div className='mb-3 font-semibold text-3xl'>Result</div>
       {error ? (
         <div>You have not assigned any batch and course</div>
+      ) : loading ? (
+        <>Loading...</>
       ) : (
         <>
           <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>

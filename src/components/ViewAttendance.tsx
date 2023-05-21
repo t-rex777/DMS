@@ -43,7 +43,7 @@ const ViewAttendance = () => {
 
         if (dates.length === 0) throw new Error('There are no attendance taken')
         setDates(dates)
-      } catch (error: any) {
+      } catch (error) {
         toast.error(error.message)
       }
     })()
@@ -63,7 +63,7 @@ const ViewAttendance = () => {
       toast.success('Attendance fetched')
 
       setAttendance(result[0])
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message)
     }
   }

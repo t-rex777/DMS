@@ -12,7 +12,7 @@ const ViewTimetable = () => {
   const { userId } = useAuthState()
 
   const [timetable, setTimetable] = useState<IViewTimetable>()
-  const [error, setError] = useState(true)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     void (async () => {
@@ -24,7 +24,7 @@ const ViewTimetable = () => {
         }
 
         setTimetable(data.result)
-      } catch (error: any) {
+      } catch (error) {
         toast.error(error.message)
       }
     })()

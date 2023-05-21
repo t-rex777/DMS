@@ -19,19 +19,23 @@ export interface IApprovalList {
 
 const ApprovalTable = () => {
   const [approvalList, setApprovalList] = useState([])
+  const [error, setError] = useState(false)
 
   const { userId } = useAuthState()
 
   const fetchApprovalList = async () => {
     try {
       const res = await getApprovalList(userId)
-      if (res.data.result === false) throw new Error('Something went wrong!')
+      if (res.data.result === false) {
+        setError(true)
+        throw new Error('Something went wrong!')
+      }
 
       const list = res.data.result.map((user: any[]) => {
         return getUser(user)
       })
       setApprovalList(list)
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message)
     }
   }
@@ -58,7 +62,7 @@ const ApprovalTable = () => {
       toast.success('Users approved successfully!')
 
       fetchApprovalList()
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message)
     }
   }
@@ -66,46 +70,54 @@ const ApprovalTable = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1 className='text-3xl font-semibold mb-4'>Approve Users</h1>
-      {approvalList.length > 0 ? (
-        <>
-          <table className='table table-zebra w-full'>
-            <thead>
-              <tr>
-                <th></th>
-                <th>UserId</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>DOB</th>
-              </tr>
-            </thead>
-            <tbody>
-              {approvalList.map(({ dob, email, name, role, userId }, index) => (
-                <tr key={index}>
-                  <td>
-                    <input
-                      className='checkbox checkbox-sm'
-                      type='checkbox'
-                      value={userId}
-                      {...register('userId')}
-                    />
-                  </td>
-                  <th>{userId}</th>
-                  <td>{name}</td>
-                  <td>{email}</td>
-                  <td>{role}</td>
-                  <td>{dob}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
 
-          <button type='submit' className='btn btn-primary mt-5 float-right'>
-            Approve
-          </button>
-        </>
+      {error ? (
+        <div>You are not eligible for approval</div>
       ) : (
-        <div>There is no one to approve</div>
+        <>
+          {' '}
+          {approvalList.length > 0 ? (
+            <>
+              <table className='table table-zebra w-full'>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>UserId</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>DOB</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {approvalList.map(({ dob, email, name, role, userId }, index) => (
+                    <tr key={index}>
+                      <td>
+                        <input
+                          className='checkbox checkbox-sm'
+                          type='checkbox'
+                          value={userId}
+                          {...register('userId')}
+                        />
+                      </td>
+                      <th>{userId}</th>
+                      <td>{name}</td>
+                      <td>{email}</td>
+                      <td>{role}</td>
+                      <td>{dob}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <button type='submit' className='btn btn-primary mt-5 float-right'>
+                Approve
+              </button>
+            </>
+          ) : (
+            <div>There is no one to approve</div>
+          )}
+        </>
       )}
     </form>
   )
