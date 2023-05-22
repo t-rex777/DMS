@@ -54,7 +54,7 @@ const AssignStudentToBatch = () => {
 
   return (
     <AppLayout>
-      <div className='font-semibold'>Upload the Notice</div>
+      <div className='font-semibold'>Assign student to a batch</div>
       {error ? (
         <div>No batch or student available</div>
       ) : (
