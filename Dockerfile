@@ -12,7 +12,7 @@ RUN npm install -g pnpm
 RUN pnpm install
 
 # Step 5: Expose the necessary ports
-EXPOSE 5173
+EXPOSE 6173
 
 # Step 6: Specify the startup command
 CMD ["pnpm", "start"]
