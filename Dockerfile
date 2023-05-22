@@ -16,3 +16,14 @@ EXPOSE 6173
 
 # Step 6: Specify the startup command
 CMD ["pnpm", "start"]
+
+
+
+
+FROM nginx:stable as production-stage
+
+COPY --from=build-stage /app/build/ /var/www/
+
+RUN rm /etc/nginx/conf.d/default.conf
+
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
