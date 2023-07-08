@@ -1,0 +1,16 @@
+name: Spelling Check
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  spelling-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Spelling
+        uses: reviewdog/action-spellcheck@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tool_name: hunspell
+          languages: en_US
+          report_level: warning
