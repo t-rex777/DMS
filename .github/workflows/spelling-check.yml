@@ -7,10 +7,18 @@ jobs:
   spelling-check:
     runs-on: ubuntu-latest
     steps:
-      - name: Check Spelling
-        uses: reviewdog/action-spellcheck@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          tool_name: hunspell
-          languages: en_US
-          report_level: warning
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup CodeQL
+        uses: github/codeql-action/init@v1
+
+      - name: Spell Check
+        run: |
+          export PATH="/usr/lib/hunspell:$PATH"
+          misspelled_words=$(echo "${{ github.event.pull_request.title }}" | hunspell -d en_US -l)
+          if [[ $misspelled_words ]]; then
+            echo "Spelling errors found in the pull request title:"
+            echo "$misspelled_words"
+            exit 1
+          fi
