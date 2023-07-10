@@ -13,11 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install spell-checking tool
-        run: npm install --global markdown-spellcheck
+      - name: Install cspell
+        run: npm install --global cspell
 
       - name: Check PR title spelling
         run: |
           PR_TITLE=$(git log --format=%B -n 1 "$GITHUB_SHA" | head -n 1)
           echo "PR Title: $PR_TITLE"
-          echo "$PR_TITLE" | markdown-spellcheck --ignore-numbers --ignore-acronyms
+          echo "$PR_TITLE" | cspell --language=en
