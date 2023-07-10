@@ -1,24 +1,19 @@
-name: Spelling Check
+name: 'PR Title Checker'
 on:
-  pull_request:
-    types: [opened, synchronize]
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - labeled
+      - unlabeled
 
 jobs:
-  spelling-check:
+  check:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Setup CodeQL
-        uses: github/codeql-action/init@v2
-
-      - name: Spell Check
-        run: |
-          export PATH="/usr/lib/hunspell:$PATH"
-          misspelled_words=$(echo "${{ github.event.pull_request.title }}" | hunspell -d en_US -l)
-          if [[ $misspelled_words ]]; then
-            echo "Spelling errors found in the pull request title:"
-            echo "$misspelled_words"
-            exit 1
-          fi
+      - uses: thehanimo/pr-title-checker@v1.4.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          pass_on_octokit_error: false
+          remote_configuration_path: 'https://raw.githubusercontent.com/grpc/grpc/master/.github/pr_title_checker_config.json'
