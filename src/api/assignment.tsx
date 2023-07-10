@@ -18,7 +18,6 @@ export async function getBatches(user_id: string) {
 export async function getAssignment(user_id: string) {
   return await dmsInstance.get('/viewAssignment', { params: { user_id } })
 }
-
 export async function getAssignmentDropdown(user_id: string) {
   return await dmsInstance.get('/assignment', { params: { user_id } })
 }
