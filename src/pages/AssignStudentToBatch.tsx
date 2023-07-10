@@ -91,7 +91,6 @@ const AssignStudentToBatch = () => {
                 ))}
               </select>
             </div>
-
             <button type='submit' className='btn btn-primary w-40'>
               Add Student
             </button>
