@@ -23,11 +23,7 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            const spell = require('child_process').spawnSync('hunspell', ['-l'], {
-              input: context.payload.pull_request.title,
-              encoding: 'utf-8',
-            });
-            if (spell.stdout.toString().trim() !== '') {
+            if (${{ github.event.pull_request.title }}.stdout.toString().trim() !== '') {
               console.error('Spelling errors found in PR title:');
               console.error(spell.stdout.toString());
               process.exit(1);
