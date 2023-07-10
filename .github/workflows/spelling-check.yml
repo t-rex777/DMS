@@ -16,4 +16,4 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           pass_on_octokit_error: false
-          remote_configuration_path: 'https://raw.githubusercontent.com/grpc/grpc/master/.github/pr_title_checker_config.json'
+          configuration_path: .github/pr-title-checker-config.json
