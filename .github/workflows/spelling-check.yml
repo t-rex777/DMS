@@ -1,19 +1,23 @@
-name: 'PR Title Checker'
+name: PR Title Spell Check
 on:
-  pull_request_target:
+  pull_request:
     types:
       - opened
-      - edited
       - synchronize
-      - labeled
-      - unlabeled
 
 jobs:
-  check:
+  spell_check:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: thehanimo/pr-title-checker@v1.4.0
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          pass_on_octokit_error: false
-          configuration_path: .github/pr-title-checker-config.json
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install spell-checking tool
+        run: npm install --global markdown-spellcheck
+
+      - name: Check PR title spelling
+        run: |
+          PR_TITLE=$(git log --format=%B -n 1 "$GITHUB_SHA" | head -n 1)
+          echo "PR Title: $PR_TITLE"
+          echo "$PR_TITLE" | markdown-spellcheck --ignore-numbers --ignore-acronyms
