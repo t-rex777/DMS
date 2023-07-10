@@ -23,7 +23,8 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            if (${{ github.event.pull_request.title }}.stdout.toString().trim() !== '') {
+          spell=$(echo ${{ github.event.pull_request.title }} | hunspell -d en_US -l)
+            if (spell.stdout.toString().trim() !== '') {
               console.error('Spelling errors found in PR title:');
               console.error(spell.stdout.toString());
               process.exit(1);
