@@ -13,11 +13,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install cspell
-        run: npm install --global cspell
+      - name: Install spell-checking tool
+        run: |
+          # Install the spell-checking tool here
+          # For example, to install 'hunspell' on Ubuntu:
+          sudo apt-get install hunspell -y
 
       - name: Check PR title spelling
-        run: |
-          PR_TITLE=$(git log --format=%B -n 1 "$GITHUB_SHA" | head -n 1)
-          echo "PR Title: $PR_TITLE"
-          echo "$PR_TITLE" | cspell --language=en
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const spell = require('child_process').spawnSync('hunspell', ['-l'], {
+              input: context.payload.pull_request.title,
+              encoding: 'utf-8',
+            });
+            if (spell.stdout.toString().trim() !== '') {
+              console.error('Spelling errors found in PR title:');
+              console.error(spell.stdout.toString());
+              process.exit(1);
+            } else {
+              console.log('PR title has no spelling errors.');
+            }

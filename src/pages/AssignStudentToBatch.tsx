@@ -75,7 +75,6 @@ const AssignStudentToBatch = () => {
                 ))}
               </select>
             </div>
-
             <div className='form-control w-full max-w-xs'>
               <label className='label'>
                 <span className='label-text'>Pick the student</span>
